@@ -1,5 +1,11 @@
+import HomeScreen from "./components/HomeScreen";
+
 function App() {
-    return <div>Hello world</div>;
+    return (
+        <div>
+            <HomeScreen />
+        </div>
+    );
 }
 
 export default App;
