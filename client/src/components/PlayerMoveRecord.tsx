@@ -4,12 +4,12 @@ export default function PlayerMoveRecord() {
   return (
     <div className="recordlist">
       <div className="table-responsive-sm">
-        <table className="table">
-          <th>
+        <table className="table table-responsive-sm">
+          <thead>
             <tr>
-              <th>Player __</th>
+              <th>Player ___</th>
             </tr>
-          </th>
+          </thead>
           <tbody>
             <tr>
               <th>Hello 5</th>
