@@ -1,7 +1,10 @@
+import CountDownModal from "./CountDownModal";
 import "./HomeScreen.css";
 import LoadingModal from "./LoadingModal";
+// import React, { useState } from "react";
 
 function HomeScreen() {
+  //   const [loading, setLoading] = useState(true);
   return (
     <>
       <div className="homescreen">
@@ -16,6 +19,7 @@ function HomeScreen() {
             className="btn btn-primary mt-5"
             data-bs-toggle="modal"
             data-bs-target="#loadingModal"
+            // data-bs-target="#countdownModal"
           >
             Play
           </button>
@@ -26,6 +30,7 @@ function HomeScreen() {
         </div>
 
         <LoadingModal />
+        <CountDownModal />
       </div>
     </>
   );

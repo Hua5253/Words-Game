@@ -1,0 +1,28 @@
+.gamescreen {
+  width: 60vw;
+  /* 80% of the viewport width */
+  min-height: 70vh;
+  /* 70% of the viewport height */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background-color: antiquewhite;
+  padding: 40px;
+  /* You can adjust padding as needed */
+  /* box-sizing: border-box; */
+}
+
+#guess-input {
+  padding: 20px;
+}
+
+.gameboard {
+  background-color: blue;
+  width: 40vw;
+  height: 70vh;
+}
+.record {
+  display: flex;
+}
