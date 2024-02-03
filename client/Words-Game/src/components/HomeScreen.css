@@ -1,8 +1,6 @@
 .homescreen {
-  width: 60vw;
-  /* 80% of the viewport width */
-  min-height: 70vh;
-  /* 70% of the viewport height */
+  width: 800px;
+  height: 600px;
   display: flex;
   flex-direction: column;
   justify-content: center;
