@@ -2,14 +2,69 @@ import React from "react";
 
 export default function PlayerMoveRecord() {
   return (
-    <ul className="list-group">
-      <li className="list-group-item active">Player __ </li>
-      <div>
-        <li className="list-group-item">A second item</li>
-        <li className="list-group-item">A third item</li>
-        <li className="list-group-item">A fourth item</li>
-        <li className="list-group-item">And a fifth one</li>
+    <div className="recordlist">
+      <div className="table-responsive-sm">
+        <table className="table">
+          <th>
+            <tr>
+              <th>Player __</th>
+            </tr>
+          </th>
+          <tbody>
+            <tr>
+              <th>Hello 5</th>
+            </tr>
+            <tr>
+              <th>Hello 5</th>
+            </tr>
+            <tr>
+              <th>Hello 5</th>
+            </tr>
+            <tr>
+              <th>Hello 5</th>
+            </tr>
+            <tr>
+              <th>Hello 5</th>
+            </tr>
+            <tr>
+              <th>Hello 5</th>
+            </tr>
+            <tr>
+              <th>Hello 5</th>
+            </tr>
+            <tr>
+              <th>Hello 5</th>
+            </tr>
+            <tr>
+              <th>Hello 5</th>
+            </tr>
+            <tr>
+              <th>Hello 5</th>
+            </tr>
+            <tr>
+              <th>Hello 5</th>
+            </tr>
+            <tr>
+              <th>Hello 5</th>
+            </tr>
+            <tr>
+              <th>Hello 5</th>
+            </tr>
+            <tr>
+              <th>Hello 5</th>
+            </tr>
+            <tr>
+              <th>Hello 5</th>
+            </tr>
+            <tr>
+              <th>Hello 5</th>
+            </tr>
+            <tr>
+              <th>Hello 5</th>
+            </tr>
+          </tbody>
+        </table>
       </div>
-    </ul>
+    </div>
   );
 }
