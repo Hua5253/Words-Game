@@ -1,6 +1,29 @@
-import {useEffect} from "react";
+import {useEffect,useState} from "react";
 
+const adjectives = [
+    'Amazing', 'Adventurous', 'Ambitious', 'Awesome', 'Brilliant',
+    'Charming', 'Courageous', 'Creative', 'Determined', 'Energetic',
+    'Enthusiastic', 'Friendly', 'Generous', 'Honest', 'Innovative',
+    'Intelligent', 'Joyful', 'Kind', 'Lively', 'Motivated',
+    'Optimistic', 'Passionate', 'Resourceful', 'Responsible', 'Supportive',
+    'Talented', 'Thoughtful', 'Vibrant', 'Warmhearted', 'Witty'
+]
 
+const animals = [
+    'Ant', 'Bear', 'Cheetah', 'Dolphin', 'Elephant',
+    'Fox', 'Giraffe', 'Hawk', 'Iguana', 'Jaguar',
+    'Kangaroo', 'Lion', 'Monkey', 'Nightingale', 'Ostrich',
+    'Penguin', 'Quokka', 'Raccoon', 'Squirrel', 'Tiger',
+    'Umbrellabird', 'Vulture', 'Walrus', 'X-ray Tetra', 'Yak',
+    'Zebra', 'Armadillo', 'Bison', 'Chameleon', 'Duck',
+    'Flamingo', 'Gorilla', 'Horse', 'Ibis', 'Jackal'
+]
+
+const generateName = () => { 
+    const randadj = adjectives[Math.floor(Math.random() * adjectives.length)]; 
+    const randanim = animals[Math.floor(Math.random() * animals.length)]; 
+    return randadj + randanim;
+}
 function checkFirstVisit() {
     const visitedCookie = getCookie('visited');
     
@@ -16,7 +39,7 @@ function checkFirstVisit() {
 // Function to set a cookie
 function setCookie() {
     document.cookie =  `visited=true;path=/`;
-    let name = "steve"
+    let name = generateName()
     document.cookie =  `name=${name};path=/`;
 }
 
@@ -33,14 +56,30 @@ function getCookie(name : String) {
 }
 
 export default function GetUser(){
+    const [name, setName] = useState('');
+    
     useEffect(() => {
+
         checkFirstVisit()
+        const fetchName = async () => {
+            const newName = await getCookie('name');
+            if (newName !== null){
+                setName(newName);
+            }else{
+                setName("error");
+            }
+            
+        };
+
+        fetchName();
+    
+    
     },[]);
 
-    let username = getCookie('name');
+    
     return (
         <div className="greeting">
-            Hello, {username}!
+            Hello, {name}!
         </div>
     );
 }

@@ -5,8 +5,8 @@ import HomeScreen from "./HomeScreen";
 function App() {
   return (
     <div>
-      {/* <HomeScreen /> */}
-      <GameScreen />
+      <HomeScreen />
+      {/* <GameScreen /> */}
       {/* <ChatBox /> */}
     </div>
   );
