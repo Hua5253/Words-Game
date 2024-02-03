@@ -1,10 +1,8 @@
-import React from "react";
-
 export default function LoadingModal() {
   return (
     <div
       className="modal fade"
-      id="loading"
+      id="loadingModal"
       tabIndex={-1}
       aria-labelledby="LoadingModalLabel"
       aria-hidden="true"

@@ -1,49 +1,48 @@
 .homescreen {
-    width: 60vw;
-    /* 80% of the viewport width */
-    min-height: 70vh;
-    /* 70% of the viewport height */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    background-color: antiquewhite;
-    padding: 40px;
-    /* You can adjust padding as needed */
-    box-sizing: border-box;
+  width: 60vw;
+  /* 80% of the viewport width */
+  min-height: 70vh;
+  /* 70% of the viewport height */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background-color: antiquewhite;
+  padding: 40px;
+  /* You can adjust padding as needed */
+  box-sizing: border-box;
 }
 
-
 .greeting {
-    text-align: right;
-    margin-bottom: 20px;
-    font-size: 25px;
+  text-align: right;
+  margin-bottom: 20px;
+  font-size: 25px;
 }
 
 .name-input {
-    border: none;
-    border-bottom: 1px solid black;
-    outline: none;
+  border: none;
+  border-bottom: 1px solid black;
+  outline: none;
 }
 
 h1 {
-    font-size: 35px;
-    margin-bottom: 20px;
+  font-size: 35px;
+  margin-bottom: 20px;
 }
 
 .btn-primary {
-    background-color: #6c757d;
-    border: none;
-    margin: 5px;
-    width: 80%;
-    padding: 10px;
-    font-size: 16px;
-    border-radius: 10px;
-    width: 15%;
+  background-color: #6c757d;
+  border: none;
+  margin: 5px;
+  width: 80%;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 10px;
+  width: 15%;
 }
 
 .btn-primary:hover {
-    background-color: #5a6268;
-    /* Darken on hover */
+  background-color: #5a6268;
+  /* Darken on hover */
 }
