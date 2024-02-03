@@ -31,18 +31,11 @@ h1 {
   margin-bottom: 20px;
 }
 
-.btn-primary {
+.homescreen .btn-primary {
   background-color: #6c757d;
   border: none;
-  margin: 5px;
-  width: 80%;
-  padding: 10px;
-  font-size: 16px;
-  border-radius: 10px;
-  width: 15%;
 }
 
-.btn-primary:hover {
+.homescreen .btn-primary:hover {
   background-color: #5a6268;
-  /* Darken on hover */
 }

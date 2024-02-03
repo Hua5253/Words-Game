@@ -9,7 +9,7 @@ export default function LoadingModal() {
       data-bs-backdrop="static"
       data-bs-keyboard="false"
     >
-      <div className="modal-dialog">
+      <div className="modal-dialog modal-dialog-centered">
         <div className="modal-content">
           <div className="modal-header d-grid justify-content-center">
             <h5 className="modal-title">Welcome</h5>
