@@ -1,13 +1,11 @@
 import "./HomeScreen.css";
 import LoadingModal from "./LoadingModal";
-
+import GetUser from "./GetUser";
 function HomeScreen() {
   return (
     <>
       <div className="homescreen">
-        <div className="greeting">
-          Hello, <input type="text" className="name-input" />
-        </div>
+        <GetUser/>
         <h1>Guessing Words Game</h1>
 
         <div className="d-grid gap-2  mx-auto">
