@@ -1,4 +1,3 @@
-import React from "react";
 import PlayerMoveRecord from "./PlayerMoveRecord";
 
 export default function GameBoard() {

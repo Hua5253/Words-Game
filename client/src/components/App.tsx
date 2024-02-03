@@ -1,6 +1,4 @@
-import ChatBox from "./ChatBox";
 import GameScreen from "./GameScreen";
-import HomeScreen from "./HomeScreen";
 
 function App() {
     return (

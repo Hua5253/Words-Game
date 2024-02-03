@@ -1,10 +1,8 @@
-import React from "react";
-
 export default function PlayerMoveRecord() {
   return (
     <div className="recordlist">
       <div className="table-responsive-sm">
-        <table className="table table-responsive-sm">
+        <table className="table">
           <thead>
             <tr>
               <th>Player ___</th>
