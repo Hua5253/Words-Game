@@ -1,4 +1,3 @@
-import React from "react";
 import "./GameScreen.css";
 import GameBoard from "./GameBoard";
 import ChatBox from "./ChatBox";
