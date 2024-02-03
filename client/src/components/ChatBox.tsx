@@ -21,6 +21,7 @@ function ChatBox() {
             const data: Message = { message: msg, isOwnMessage: true };
             socket.emit("message", data);
             setMessages([...messages, data]);
+            messageRef.current.value = "";
         }
     };
 
