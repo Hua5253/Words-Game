@@ -15,14 +15,44 @@
 }
 
 #guess-input {
-  padding: 20px;
+  padding: 10px;
+  height: max-content;
+  position: relative;
+  bottom: 0;
+  vertical-align: bottom;
+  margin-top: 25px;
+  display: inline-block;
 }
 
 .gameboard {
-  background-color: blue;
-  width: 40vw;
+  width: 35vw;
   height: 70vh;
+  align-items: center;
 }
 .record {
   display: flex;
+  width: max-content;
+  height: 55vh;
+  position: relative;
+  left: 1vw;
+  top: 1vw;
+}
+.gameComponents {
+  height: 70vh;
+}
+
+.recordlist {
+  width: 15vw;
+}
+
+.table {
+  overflow-y: scroll;
+  height: 50vh;
+  display: block;
+}
+.chat {
+  transform: scale(0.75);
+  position: absolute;
+  top: 1;
+  right: 50px;
 }

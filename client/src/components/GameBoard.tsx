@@ -3,8 +3,8 @@ import PlayerMoveRecord from "./PlayerMoveRecord";
 
 export default function GameBoard() {
   return (
-    <div className="gameboard">
-      <div className="record grid gap-0 row-gap-3">
+    <div className="gameComponents">
+      <div className="record">
         <div className="p-2 g-col-6">
           <PlayerMoveRecord />
         </div>
