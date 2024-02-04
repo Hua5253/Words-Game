@@ -1,12 +1,14 @@
 import HomeScreen from "./HomeScreen";
-// import GameScreen from "./GameScreen";
+import GameScreen from "./GameScreen";
+import StatsScreen from "./StatsScreen";
 
 function App() {
     return (
         <div>
-            <HomeScreen />
+            {/* <HomeScreen /> */}
             {/* <GameScreen /> */}
             {/* <ChatBox /> */}
+            <StatsScreen />
         </div>
     );
 }

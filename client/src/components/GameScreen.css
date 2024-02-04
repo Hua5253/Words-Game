@@ -45,11 +45,11 @@
   width: 15vw;
 }
 
-.table {
+/* .table {
   overflow-y: scroll;
   height: 50vh;
   display: block;
-}
+} */
 .chat {
   transform: scale(0.75);
   position: absolute;
