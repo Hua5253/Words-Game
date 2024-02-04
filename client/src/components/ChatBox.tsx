@@ -2,7 +2,7 @@ import { FormEvent, useRef, useState } from "react";
 import "../CSS/ChatBox.css";
 import { io, Socket } from "socket.io-client";
 
-const socket: Socket = io("http://localhost:3000");
+const gameSocket: Socket = io("http://localhost:3000/game");
 
 interface Message {
     message: string;
@@ -17,16 +17,19 @@ function ChatBox() {
         event.preventDefault();
         if (messageRef.current != null) {
             const { value: msg } = messageRef.current;
+
             // send message
-            const data: Message = { message: msg, isOwnMessage: true };
-            socket.emit("message", data);
-            setMessages([...messages, data]);
-            messageRef.current.value = "";
+            if (msg) {
+                const data: Message = { message: msg, isOwnMessage: true };
+                gameSocket.emit("message", data);
+                setMessages([...messages, data]);
+                messageRef.current.value = "";
+            }
         }
     };
 
     // receive message
-    socket.on("chat message", data => {
+    gameSocket.on("chat message", data => {
         data.isOwnMessage = false;
         setMessages([...messages, data]);
     });

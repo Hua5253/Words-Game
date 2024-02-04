@@ -1,14 +1,29 @@
+import { Socket } from "socket.io-client";
 import "../CSS/Modal.css";
+import { useNavigate } from "react-router-dom";
 
 interface Props {
     loadingGame: boolean;
     setInCountDown: () => void;
+    socket: Socket;
 }
 
-export default function LoadingModal({ loadingGame, setInCountDown }: Props) {
+export default function LoadingModal({
+    loadingGame,
+    setInCountDown,
+    socket,
+}: Props) {
+    const navigate = useNavigate();
+
+    socket.on("opponent-found", () => {
+        console.log("opponent found");
+    });
+
     function transitToCountDownModal() {
         setInCountDown();
     }
+
+    const handleJoinClick = () => {};
 
     if (!loadingGame) return null;
 
@@ -48,8 +63,9 @@ export default function LoadingModal({ loadingGame, setInCountDown }: Props) {
                             type='button'
                             className='btn btn-primary'
                             data-bs-dismiss='modal'
+                            onClick={handleJoinClick}
                         >
-                            Cancel
+                            join
                         </button>
                     </div>
                 </div>

@@ -3,7 +3,6 @@ import http from 'http';
 import { Server } from 'socket.io';
 import cors from 'cors';
 
-
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
@@ -16,8 +15,34 @@ const io = new Server(server, {
 
 app.use(cors()); // Enable CORS for all routes 
 
-io.on('connection', (socket) => {
-    // console.log(socket.id);
+const connections = new Set();
+let room = 1;
+
+io.on("connection", (socket) => {
+    console.log(socket.id);
+    connections.add(socket.id);
+
+    // opponent found
+    console.log(connections.size + " connections");
+    if(connections.size % 2 === 0) {
+        console.log("opponent found");
+        socket.to(room.toString()).emit("opponent-found");
+    }
+
+    socket.on("finding-a-match", (cb) => {
+      // join to an assigned room
+      socket.join(room.toString());
+      cb(room);
+    })
+
+    socket.on("disconnect", () => {
+      // connections.delete(socket.id);
+    })
+});
+
+const gameIo = io.of("/game");
+
+gameIo.on('connection', (socket) => {
     socket.on("message", (data) => {
       socket.broadcast.emit("chat message", data);
     })
