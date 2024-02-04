@@ -1,8 +1,11 @@
 import CountDownModal from "./CountDownModal";
+import { useNavigate } from 'react-router-dom'
 import "./HomeScreen.css";
 import LoadingModal from "./LoadingModal";
 import GetUser from "./GetUser";
 function HomeScreen() {
+  const navigate = useNavigate()
+
   //   const [loading, setLoading] = useState(true);
   return (
     <>
@@ -21,7 +24,7 @@ function HomeScreen() {
             Play
           </button>
 
-          <button type="button" className="btn btn-primary mt-3">
+          <button type="button" className="btn btn-primary mt-3" onClick={()=>{navigate('/stats')}}>
             View Stats
           </button>
         </div>
