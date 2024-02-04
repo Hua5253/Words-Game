@@ -11,7 +11,6 @@ const socket: Socket = io("http://localhost:3000");
 function HomeScreen() {
     const navigate = useNavigate();
     const [loadingGame, setLoadingGame] = useState(false);
-    const [inCountDown, setInCountDown] = useState(false);
 
     useEffect(() => {
         socket.on("matchFound", (data: { roomId: string }) => {
@@ -25,7 +24,6 @@ function HomeScreen() {
     }, []);
 
     const transitToCountDown = () => {
-        setInCountDown(true);
         setLoadingGame(false);
     };
 
@@ -67,7 +65,7 @@ function HomeScreen() {
                     setInCountDown={transitToCountDown}
                     socket={socket}
                 />
-                <CountDownModal inCountDown={inCountDown} />
+                {/* <CountDownModal /> */}
             </div>
         </>
     );
