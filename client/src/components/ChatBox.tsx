@@ -1,5 +1,5 @@
 import { FormEvent, useRef, useState } from "react";
-import "./ ChatBox.css";
+import "../CSS/ChatBox.css";
 import { io, Socket } from "socket.io-client";
 
 const socket: Socket = io("http://localhost:3000");
