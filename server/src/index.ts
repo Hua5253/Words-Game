@@ -1,6 +1,6 @@
 import express from 'express';
 import http from 'http';
-import { Server } from 'socket.io';
+import { Server, Socket } from 'socket.io';
 import cors from 'cors';
 
 const app = express();
@@ -15,29 +15,33 @@ const io = new Server(server, {
 
 app.use(cors()); // Enable CORS for all routes 
 
-const connections = new Set();
-let room = 1;
+interface Player extends Socket {}
 
-io.on("connection", (socket) => {
-    console.log(socket.id);
-    connections.add(socket.id);
+let waitingPlayers: Player[] = [];
 
-    // opponent found
-    console.log(connections.size + " connections");
-    if(connections.size % 2 === 0) {
-        console.log("opponent found");
-        socket.to(room.toString()).emit("opponent-found");
-    }
+io.on('connection', (socket: Socket) => {
+    console.log('A user connected:', socket.id);
 
-    socket.on("finding-a-match", (cb) => {
-      // join to an assigned room
-      socket.join(room.toString());
-      cb(room);
-    })
+    socket.on('finding-a-match', () => {
+        console.log('Player looking for match:', socket.id);
+        waitingPlayers.push(socket as Player);
 
-    socket.on("disconnect", () => {
-      // connections.delete(socket.id);
-    })
+        if (waitingPlayers.length >= 2) {
+            const player1 = waitingPlayers.shift()!;
+            const player2 = waitingPlayers.shift()!;
+
+            const roomId = player1.id + '#' + player2.id;
+            player1.join(roomId);
+            player2.join(roomId);
+
+            io.to(roomId).emit('matchFound', { roomId });
+        }
+    });
+
+    socket.on('disconnect', () => {
+        waitingPlayers = waitingPlayers.filter(player => player.id !== socket.id);
+        console.log('User disconnected', socket.id);
+    });
 });
 
 const gameIo = io.of("/game");
