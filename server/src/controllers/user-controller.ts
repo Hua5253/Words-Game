@@ -63,7 +63,7 @@ export const getUsersByWins: RequestHandler = async(request, response, next) =>{
                 wonmatches:{
                     $size:{
                         $filter:{
-                            input: 'matches',
+                            input: '$matches',
                             as: 'match',
                             cond: {$eq: ['$$match.won', true]},
                         },
@@ -172,7 +172,7 @@ export const getUsersByTurns: RequestHandler = async(request, response, next) =>
             },
             {
                 $sort:{
-                    avgTurns: -1
+                    avgTurns: 1
                 },
             },
             {
@@ -240,7 +240,7 @@ export const getLastHourByWins: RequestHandler = async(request, response, next) 
                 wonmatches:{
                     $size:{
                         $filter:{
-                            input: 'matches',
+                            input: '$matches',
                             as: 'match',
                             cond: {$eq: ['$$match.won', true]},
                         },
@@ -338,7 +338,7 @@ export const getLastHourByTurns: RequestHandler = async(request, response, next)
             },
             {
                 $sort:{
-                    avgTurns: -1
+                    avgTurns: 1
                 },
             },
             {

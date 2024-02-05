@@ -8,7 +8,12 @@ const UserSchema = new Schema(
             won: Boolean,
             turns: Number,
             timePlayed: Date,
-        }]}
+        }]},
+        wonMatches:{ type: Number},
+        totalMatches:{ type: Number},
+        avgTurns:{ type: Number},
+
+        
     },
     { timestamps: true },
 )
