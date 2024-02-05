@@ -36,14 +36,14 @@ function HomeScreen() {
 
     return (
         <>
-            <div className='homescreen'>
+            <div className="homescreen">
                 <GetUser />
                 <h1>Guessing Words Game</h1>
 
-                <div className='d-grid gap-2  mx-auto'>
+                <div className="d-grid gap-2  mx-auto">
                     <button
-                        type='button'
-                        className='btn btn-primary mt-5'
+                        type="button"
+                        className="btn btn-primary mt-5"
                         onClick={() => {
                             setLoadingGame(true);
                             findingAMatch();
@@ -53,8 +53,8 @@ function HomeScreen() {
                     </button>
 
                     <button
-                        type='button'
-                        className='btn btn-primary mt-3'
+                        type="button"
+                        className="btn btn-primary mt-3"
                         onClick={() => {
                             navigate("/stats");
                         }}

@@ -1,62 +1,70 @@
 .gamescreen {
-  width: 1000px;
-  /* 80% of the viewport width */
-  height: 600px;
-  /* 70% of the viewport height */
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: antiquewhite;
-  padding: 40px;
-  /* You can adjust padding as needed */
-  /* box-sizing: border-box; */
+    width: 1000px;
+    height: 600px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: antiquewhite;
+    padding: 40px;
 }
 
-#guess-input {
-  padding: 10px;
-  height: max-content;
-  position: relative;
-  bottom: 0;
-  vertical-align: bottom;
-  margin-top: 25px;
-  display: inline-block;
+#guess-input,
+#token-input {
+    padding-left: 50px;
+    padding-top: 5px;
+    height: 50px; /* Set your desired height */
+    margin-top: 3px;
+    display: inline-block;
+    width: 450px;
+    text-align: center;
+}
+
+#guess-input input,
+#token-input input {
+    width: 200px;
+    padding: 10px;
 }
 
 .gameboard {
-  width: 35vw;
-  height: 70vh;
-  align-items: center;
+    width: 35vw;
+    height: 70vh;
+    align-items: center;
 }
 
 .record {
-  display: flex;
-  width: max-content;
-  flex: 1;
-  overflow: hidden;
-  overflow-y: auto;
-
-
+    display: flex;
+    width: max-content;
+    height: 55vh;
+    position: relative;
+    left: 1vw;
+    top: 1vw;
 }
-
 .gameComponents {
-  display: flex;
-  flex-direction: column;
+    display: flex;
+    flex-direction: column;
 
-  height: 100%;
+    height: 100%;
+    /* height: 70vh; */
 }
 
 .recordlist {
-  width: 15vw;
+    width: 15vw;
 }
 
-/* .table {
-  overflow-y: scroll;
-  height: 50vh;
-  display: block;
-} */
+.record table {
+    border: 2px solid black;
+    width: 200px;
+}
+
+.playertable {
+    overflow-y: scroll;
+    height: 50vh;
+    display: block;
+    border: 5px solid rgb(255, 255, 255);
+}
 .chat {
-  transform: scale(0.75);
-  position: absolute;
-  top: 1;
-  right: 50px;
+    transform: scale(0.75);
+    position: absolute;
+    top: 1;
+    right: 50px;
 }

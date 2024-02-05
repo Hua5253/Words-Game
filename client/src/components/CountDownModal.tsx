@@ -11,7 +11,7 @@ export default function CountDownModal({ timeout, closeModal }: Props) {
     useEffect(() => {
         // Decrease the timer every second
         const timer = setInterval(() => {
-            setCounter(prevSeconds => prevSeconds - 1);
+            setCounter((prevSeconds) => prevSeconds - 1);
         }, 1000);
 
         // Cleanup the interval on component unmount
@@ -28,21 +28,21 @@ export default function CountDownModal({ timeout, closeModal }: Props) {
 
     return (
         <div
-            className='Modal'
-            id='countdownModal'
+            className="Modal"
+            id="countdownModal"
             tabIndex={-1}
-            aria-labelledby='CountdownModalLabel'
-            aria-hidden='true'
-            data-bs-backdrop='static'
-            data-bs-keyboard='false'
+            aria-labelledby="CountdownModalLabel"
+            aria-hidden="true"
+            data-bs-backdrop="static"
+            data-bs-keyboard="false"
         >
-            <div className='modal-dialog modal-dialog-centered'>
-                <div className='modal-content'>
-                    <div className='modal-header d-grid justify-content-center'>
-                        <h5 className='modal-title'>Game Found</h5>
+            <div className="modal-dialog modal-dialog-centered">
+                <div className="modal-content">
+                    <div className="modal-header d-grid justify-content-center">
+                        <h5 className="modal-title">Game Found</h5>
                     </div>
-                    <div className='modal-body d-grid justify-content-center'>
-                        <div className='mt-3'>{counter}</div>
+                    <div className="modal-body d-grid justify-content-center">
+                        <div className="mt-3">{counter}</div>
                     </div>
                 </div>
             </div>
