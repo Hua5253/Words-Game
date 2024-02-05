@@ -12,6 +12,8 @@
     "dependencies": {
         "cors": "^2.8.5",
         "express": "^4.18.2",
+        "mongodb": "^6.3.0",
+        "mongoose": "^8.1.1",
         "ts-node": "^10.9.2"
     },
     "devDependencies": {
