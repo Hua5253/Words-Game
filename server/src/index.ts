@@ -1,7 +1,9 @@
-import express from 'express';
+import express, {NextFunction, Request, Response} from 'express';
 import http from 'http';
 import { Server, Socket } from 'socket.io';
 import cors from 'cors';
+import mongoose from 'mongoose';
+import userRouter from './routes/user-router'
 
 const app = express();
 const server = http.createServer(app);
@@ -52,3 +54,26 @@ gameIo.on('connection', (socket) => {
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+const DATAPORT = 4000;
+const MongoDBURL = 'mongodb://localhost:27017/<word-game>';
+
+mongoose
+	.connect(MongoDBURL)
+	.then( () => {
+	app.listen(DATAPORT, () => console.log(`app is listening on port ${DATAPORT}`));
+
+	})
+	.catch( (err) => {
+	console.error(err);
+});
+
+app.use("/api", userRouter);
+
+
+app.use((error: unknown, request: Request, response: Response, next: NextFunction) => {
+	console.error(error);
+	let errorMessage = "An unknown error occured."
+	if(error instanceof Error) errorMessage = error.message;
+	response.status(500).json({error: errorMessage});
+});
