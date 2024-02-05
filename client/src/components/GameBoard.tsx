@@ -15,7 +15,10 @@ export default function GameBoard() {
             {/* Input box */}
             <div id="token-input">
                 <form className="input-group mb-3">
-                    <input type="text" placeholder="Enter your word" />
+                    <input
+                        type="text"
+                        placeholder="Word for your opponent to guess"
+                    />
                     <button className="btn btn-primary" type="button">
                         Guess
                     </button>
