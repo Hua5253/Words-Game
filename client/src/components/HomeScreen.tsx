@@ -3,12 +3,11 @@ import { useNavigate } from "react-router-dom";
 import "../CSS/HomeScreen.css";
 import LoadingModal from "./LoadingModal";
 import GetUser from "./GetUser";
-import { useEffect, useState } from "react";
-import { io, Socket } from "socket.io-client";
-
-const socket: Socket = io("http://localhost:3000");
+import { useContext, useEffect, useState } from "react";
+import { SocketContext } from "./SocketContext";
 
 function HomeScreen() {
+    const socket = useContext(SocketContext);
     const navigate = useNavigate();
     const [loadingGame, setLoadingGame] = useState(false);
     const [showCountDownModal, setShowCountDownModal] = useState(false);
@@ -16,7 +15,6 @@ function HomeScreen() {
     useEffect(() => {
         socket.on("matchFound", (data: { roomId: string }) => {
             console.log("Match found!", data);
-            // Navigate to game session or update UI accordingly
             setShowCountDownModal(true);
             setLoadingGame(false);
         });

@@ -1,15 +1,17 @@
 import { FormEvent, useRef, useState } from "react";
 import "../CSS/ChatBox.css";
-import { io, Socket } from "socket.io-client";
+import { Socket } from "socket.io-client";
 
-const gameSocket: Socket = io("http://localhost:3000/game");
+interface Props {
+    socket: Socket;
+}
 
 interface Message {
     message: string;
     isOwnMessage: boolean;
 }
 
-function ChatBox() {
+function ChatBox({ socket }: Props) {
     const messageRef = useRef<HTMLInputElement>(null);
     const [messages, setMessages] = useState<Message[]>([]);
 
@@ -21,7 +23,7 @@ function ChatBox() {
             // send message
             if (msg) {
                 const data: Message = { message: msg, isOwnMessage: true };
-                gameSocket.emit("message", data);
+                socket.emit("message", data);
                 setMessages([...messages, data]);
                 messageRef.current.value = "";
             }
@@ -29,7 +31,7 @@ function ChatBox() {
     };
 
     // receive message
-    gameSocket.on("chat message", data => {
+    socket.on("chat message", data => {
         data.isOwnMessage = false;
         setMessages([...messages, data]);
     });

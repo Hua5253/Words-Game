@@ -17,11 +17,12 @@ interface Player extends Socket {}
 
 let waitingPlayers: Player[] = [];
 
+
 io.on('connection', (socket: Socket) => {
-    console.log('A user connected:', socket.id);
+    // console.log('A user connected:', socket.id);
 
     socket.on('finding-a-match', () => {
-        console.log('Player looking for match:', socket.id);
+        // console.log('Player looking for match:', socket.id);
         waitingPlayers.push(socket as Player);
 
         if (waitingPlayers.length >= 2) {
@@ -33,6 +34,12 @@ io.on('connection', (socket: Socket) => {
             player2.join(roomId);
 
             io.to(roomId).emit('matchFound', { roomId });
+            player1.on("message", (data) => {
+              player1.to(roomId).emit("chat message", data);
+            })
+            player2.on("message", (data) => {
+              player2.to(roomId).emit("chat message", data);
+            })
         }
     });
 
@@ -40,14 +47,6 @@ io.on('connection', (socket: Socket) => {
         waitingPlayers = waitingPlayers.filter(player => player.id !== socket.id);
         console.log('User disconnected', socket.id);
     });
-});
-
-const gameIo = io.of("/game");
-
-gameIo.on('connection', (socket) => {
-    socket.on("message", (data) => {
-      socket.broadcast.emit("chat message", data);
-    })
 });
 
 const PORT = process.env.PORT || 3000;
