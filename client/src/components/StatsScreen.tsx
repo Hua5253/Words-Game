@@ -1,65 +1,105 @@
+import { useEffect, useState } from "react";
 import "../CSS/StatsScreen.css";
 
 function StatsScreen() {
+    const mockData = [
+        { user: "jack", totalGames: 40, winGames: 10, loseGames: 30, averageTurns: 5 },
+        { user: "Mark", totalGames: 30, winGames: 20, loseGames: 10, averageTurns: 4 },
+        { user: "Tom", totalGames: 20, winGames: 5, loseGames: 15, averageTurns: 3 },
+    ];
+
+    const [currentTab, setCurrentTab] = useState("all");
+
+    const [data, setData] = useState([] as any[]);
+
+    const [sortBy, setSortBy] = useState("");
+
+    useEffect(() => {
+        getData();
+    }, [sortBy]);
+
+    const getData = () => {
+        switch (sortBy) {
+            case "1":
+                setData(mockData.sort((a, b) => b.winGames - a.winGames));
+                break;
+            case "2":
+                setData(mockData.sort((a, b) => a.averageTurns - b.averageTurns));
+                break;
+            case "3":
+                setData(mockData.sort((a, b) => b.totalGames - a.totalGames));
+                break;
+            default:
+                setData(mockData);
+                break;
+        }
+    };
+
+    const handleChangeTab = (tab: string) => {
+        console.log(tab);
+
+        setCurrentTab(tab);
+    };
+
     return (
         <>
-            <div className='statsscreen'>
-                <h2 className='mb-5 text-center'>Leaderboard</h2>
-                <div className='mb-3 d-flex gap-3'>
-                    <ul className='nav nav-tabs'>
-                        <li className='nav-item'>
-                            <div className='nav-link active cursor-pointer'>
-                                All time
-                            </div>
+            <div className="statsscreen">
+                <h2 className="mb-5 text-center">Leaderboard</h2>
+                <div className="mb-3 d-flex gap-3">
+                    <ul className="nav nav-tabs">
+                        <li
+                            className="nav-item"
+                            onClick={() => {
+                                handleChangeTab("all");
+                            }}>
+                            <div className={`nav-link cursor-pointer ${currentTab == "all" ? "active" : ""}`}>All time</div>
                         </li>
-                        <li className='nav-item'>
-                            <div className='nav-link cursor-pointer'>
-                                Last hour
-                            </div>
+                        <li
+                            className="nav-item"
+                            onClick={() => {
+                                handleChangeTab("last");
+                            }}>
+                            <div className={`nav-link cursor-pointer ${currentTab == "last" ? "active" : ""}`}>Last hour</div>
                         </li>
                     </ul>
                     <div>
-                        <select className='form-select'>
-                            <option selected>Sort by</option>
-                            <option value='1'>Number of wins</option>
-                            <option value='2'>Average turns for wins</option>
-                            <option value='3'>Number of games played</option>
+                        <select
+                            className="form-select"
+                            onChange={(e) => {
+                                setSortBy(e.target.value);
+                            }}>
+                            <option selected disabled>
+                                Sort by
+                            </option>
+                            <option value="1">Number of wins</option>
+                            <option value="2">Average turns for wins</option>
+                            <option value="3">Number of games played</option>
                         </select>
                     </div>
                 </div>
                 <div>
-                    <table className='table table-striped'>
+                    <table className="table table-striped">
                         <thead>
                             <tr>
-                                <th scope='col'>#</th>
-                                <th scope='col'>User</th>
-                                <th scope='col'>Number of games</th>
-                                <th scope='col'>Wins/Losses</th>
-                                <th scope='col'>Average turn per win</th>
+                                <th scope="col">#</th>
+                                <th scope="col">User</th>
+                                <th scope="col">Number of games</th>
+                                <th scope="col">Wins/Losses</th>
+                                <th scope="col">Average turn per win</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <th scope='row'>1</th>
-                                <td>Mark</td>
-                                <td>30</td>
-                                <td>29/1</td>
-                                <td>2 min</td>
-                            </tr>
-                            <tr className='table-primary'>
-                                <th scope='row'>2</th>
-                                <td>Jacob</td>
-                                <td>30</td>
-                                <td>28/2</td>
-                                <td>3 min</td>
-                            </tr>
-                            <tr>
-                                <th scope='row'>2</th>
-                                <td>Jacob</td>
-                                <td>30</td>
-                                <td>28/2</td>
-                                <td>3 min</td>
-                            </tr>
+                            {data.map((item, index) => (
+                                <tr className={`${item.user == "jack" ? "table-primary" : ""}`} key={item.user}>
+                                    <th scope="row">{index + 1}</th>
+                                    <td>{item.user}</td>
+                                    <td>{item.totalGames}</td>
+                                    <td>
+                                        {item.winGames}/{item.loseGames}
+                                    </td>
+                                    <td>{item.averageTurns}</td>
+                                </tr>
+                            ))}
                         </tbody>
                     </table>
                 </div>

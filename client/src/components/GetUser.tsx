@@ -1,75 +1,5 @@
 import { useEffect, useState } from "react";
-
-const adjectives = [
-    "Amazing",
-    "Adventurous",
-    "Ambitious",
-    "Awesome",
-    "Brilliant",
-    "Charming",
-    "Courageous",
-    "Creative",
-    "Determined",
-    "Energetic",
-    "Enthusiastic",
-    "Friendly",
-    "Generous",
-    "Honest",
-    "Innovative",
-    "Intelligent",
-    "Joyful",
-    "Kind",
-    "Lively",
-    "Motivated",
-    "Optimistic",
-    "Passionate",
-    "Resourceful",
-    "Responsible",
-    "Supportive",
-    "Talented",
-    "Thoughtful",
-    "Vibrant",
-    "Warmhearted",
-    "Witty",
-];
-
-const animals = [
-    "Ant",
-    "Bear",
-    "Cheetah",
-    "Dolphin",
-    "Elephant",
-    "Fox",
-    "Giraffe",
-    "Hawk",
-    "Iguana",
-    "Jaguar",
-    "Kangaroo",
-    "Lion",
-    "Monkey",
-    "Nightingale",
-    "Ostrich",
-    "Penguin",
-    "Quokka",
-    "Raccoon",
-    "Squirrel",
-    "Tiger",
-    "Umbrellabird",
-    "Vulture",
-    "Walrus",
-    "X-ray Tetra",
-    "Yak",
-    "Zebra",
-    "Armadillo",
-    "Bison",
-    "Chameleon",
-    "Duck",
-    "Flamingo",
-    "Gorilla",
-    "Horse",
-    "Ibis",
-    "Jackal",
-];
+import { adjectives, animals } from "../data/username";
 
 const generateName = () => {
     const randadj = adjectives[Math.floor(Math.random() * adjectives.length)];
@@ -124,5 +54,5 @@ export default function GetUser() {
         fetchName();
     }, []);
 
-    return <div className='greeting'>Hello, {name}!</div>;
+    return <div className="greeting">Hello, {name}!</div>;
 }
