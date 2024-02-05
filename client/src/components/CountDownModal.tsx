@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 interface Props {
     closeModal: () => void;
     timeout: number;
@@ -22,7 +21,7 @@ export default function CountDownModal({ timeout, closeModal }: Props) {
     useEffect(() => {
         // When countdown reaches 0, call the onClose function
         if (counter <= 0) {
-            setCounter(10);
+            setCounter(timeout);
             closeModal();
         }
     }, [counter]);
