@@ -1,13 +1,11 @@
 .gamescreen {
-  width: 60vw;
+  width: 1000px;
   /* 80% of the viewport width */
-  min-height: 70vh;
+  height: 600px;
   /* 70% of the viewport height */
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  text-align: center;
   background-color: antiquewhite;
   padding: 40px;
   /* You can adjust padding as needed */
@@ -29,16 +27,22 @@
   height: 70vh;
   align-items: center;
 }
+
 .record {
   display: flex;
   width: max-content;
-  height: 55vh;
-  position: relative;
-  left: 1vw;
-  top: 1vw;
+  flex: 1;
+  overflow: hidden;
+  overflow-y: auto;
+
+
 }
+
 .gameComponents {
-  height: 70vh;
+  display: flex;
+  flex-direction: column;
+
+  height: 100%;
 }
 
 .recordlist {
