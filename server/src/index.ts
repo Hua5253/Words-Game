@@ -57,8 +57,8 @@ gameIo.on("connection", (socket) => {
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
-const DATAPORT = 4000;
-const MongoDBURL = 'mongodb://localhost:27017/<word-game>';
+const DATAPORT = 5000;
+const MongoDBURL = 'mongodb://localhost:27017/word-game';
 
 mongoose
 	.connect(MongoDBURL)
@@ -69,6 +69,9 @@ mongoose
 	.catch( (err) => {
 	console.error(err);
 });
+
+app.use(express.json())
+
 
 app.use("/api", userRouter);
 
