@@ -235,7 +235,36 @@ export const creatUser: RequestHandler = async(request, response, next) =>{
     }
 };
 
+//adds a match to a used based on userId, include match info in the request body and userId in params
 export const updateUser: RequestHandler = async(request, response, next) =>{
+    const {won, turns, timePlayed} = request.body;
+    const userId = request.params.userId;
+    const newMatch ={
+        won,
+        turns, 
+        timePlayed,
+    }
+    
+    try {
+		const users = await UserModel.updateOne(
+            {
+                _id: userId,
+            },
+            {
+                $push: {matches: newMatch}
+            },
 
+        ).exec();
+
+        if (users) {
+            response.status(200).json(users);
+            console.log(users);
+        } else {
+            console.log('no user within the last hour');
+        }
+		
+	} catch (error) {
+		next(error);
+	}
 
 };
