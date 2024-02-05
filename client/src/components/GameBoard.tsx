@@ -4,10 +4,10 @@ export default function GameBoard() {
     return (
         <div className='gameComponents'>
             <div className='record'>
-                <div className='p-2 g-col-6'>
+                <div className='pe-2 g-col-6'>
                     <PlayerMoveRecord />
                 </div>
-                <div className='p-2 g-col-6'>
+                <div className='g-col-6'>
                     <PlayerMoveRecord />
                 </div>
             </div>
