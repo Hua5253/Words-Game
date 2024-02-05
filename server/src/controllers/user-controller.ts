@@ -1,15 +1,27 @@
 import { RequestHandler } from "express";
 import UserModel from '../models/UserSchema';
 
-// export const getUser: RequestHandler = async(request, response, next) =>{
-// 	try {
-// 		const user = await UserModel.find().exec();
-// 		response.status(200).json(user);
+export const getUsers: RequestHandler = async(request, response, next) =>{
+	try {
+		const users = await UserModel.find().exec();
+		response.status(200).json(users);
 
-// 	} catch (error) {
-// 		next(error);
-// 	}
-// };
+	} catch (error) {
+		next(error);
+	}
+};
+
+export const getUser: RequestHandler = async(request, response, next) =>{
+    const userId = request.params.userId;
+
+	try {
+		const user = await UserModel.findById(userId).exec();
+		response.status(200).json(user);
+
+	} catch (error) {
+		next(error);
+	}
+};
 
 export const creatUser: RequestHandler = async(request, response, next) =>{
     const name = request.body.name;
