@@ -1,12 +1,10 @@
 import express, {NextFunction, Request, Response} from 'express';
-import express, {NextFunction, Request, Response} from 'express';
 import http from 'http';
 import { Server, Socket } from 'socket.io';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import userRouter from './routes/user-router'
-import mongoose from 'mongoose';
-import userRouter from './routes/user-router'
+
 
 const app = express();
 const server = http.createServer(app);
