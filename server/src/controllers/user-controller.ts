@@ -141,6 +141,47 @@ export const getUsersByGamesPlayed: RequestHandler = async(request, response, ne
 	}
 };
 
+// returns all users sorted by turns in won games, includes average turn value in response
+export const getUsersByTurns: RequestHandler = async(request, response, next) =>{
+	try {
+		const users = await UserModel.aggregate([
+            {
+                $match:{
+                    'matches.won': true
+                },
+            },
+            {
+                $addFields:{
+                    avgTurns: {$avg: '$matches.turns'},
+                },
+            },
+            {
+                $sort:{
+                    avgTurns: -1
+                },
+            },
+            {
+                $project:{
+                    name:1,
+                    matches:1,
+                    avgTurns:1,
+                },
+            },
+        ])
+        .exec();
+
+        if (users){
+            response.status(200).json(users);
+            console.log(users);
+        }else{
+            console.log('no user within the last hour');
+        }
+
+	} catch (error) {
+		next(error);
+	}
+};
+
 // returns all user with matches within the last hour
 export const getLastHour: RequestHandler = async(request, response, next) =>{
     try {
