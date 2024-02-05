@@ -237,7 +237,7 @@ export const getLastHourByWins: RequestHandler = async(request, response, next) 
             },
             {
               $addFields:{
-                wonmatches:{
+                wonMatches:{
                     $size:{
                         $filter:{
                             input: '$matches',
