@@ -1,27 +1,15 @@
 import { Socket } from "socket.io-client";
 import "../CSS/Modal.css";
-import { useNavigate } from "react-router-dom";
-
 interface Props {
     loadingGame: boolean;
     setInCountDown: () => void;
     socket: Socket;
 }
 
-export default function LoadingModal({
-    loadingGame,
-    setInCountDown,
-    socket,
-}: Props) {
-    const navigate = useNavigate();
-
+export default function LoadingModal({ loadingGame, socket }: Props) {
     socket.on("opponent-found", () => {
         console.log("opponent found");
     });
-
-    function transitToCountDownModal() {
-        setInCountDown();
-    }
 
     const handleJoinClick = () => {};
 

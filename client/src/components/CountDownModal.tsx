@@ -1,23 +1,32 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+interface Props {
+    closeModal: () => void;
+    timeout: number;
+}
 
-export default function CountDownModal() {
-    const [counter, setCounter] = useState(3);
-    const [show, setShow] = useState(false);
+export default function CountDownModal({ timeout, closeModal }: Props) {
+    const [counter, setCounter] = useState(timeout);
+    // const navigate = useNavigate();
 
     useEffect(() => {
-        if (counter > 0) {
-            const timer = setTimeout(() => setCounter(counter - 1), 1000);
-            return () => clearTimeout(timer);
-        } else {
-            setShow(false); // Hide the modal when the countdown is complete
-        }
-    }, [counter]); // Run effect whenever counter changes
+        // Decrease the timer every second
+        const timer = setInterval(() => {
+            setCounter(prevSeconds => prevSeconds - 1);
+        }, 1000);
 
-    //   useEffect(() => {
-    //     if (!Connecting) {
-    //       setShow(false); // Hide the modal when connecting is done
-    //     }
-    //   }, [Connecting]); // Run effect whenever connecting changes
+        // Cleanup the interval on component unmount
+        return () => clearInterval(timer);
+    }, []);
+
+    useEffect(() => {
+        // When countdown reaches 0, call the onClose function
+        if (counter <= 0) {
+            setCounter(10);
+            closeModal();
+        }
+    }, [counter]);
+
     return (
         <div
             className='Modal'
