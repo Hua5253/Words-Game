@@ -60,7 +60,7 @@ export const getUsersByWins: RequestHandler = async(request, response, next) =>{
 		const users = await UserModel.aggregate([
             {
               $addFields:{
-                wonmatches:{
+                wonMatches:{
                     $size:{
                         $filter:{
                             input: '$matches',
