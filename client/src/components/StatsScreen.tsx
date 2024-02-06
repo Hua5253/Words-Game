@@ -6,6 +6,17 @@ function StatsScreen() {
         { user: "jack", totalGames: 40, winGames: 10, loseGames: 30, averageTurns: 5 },
         { user: "Mark", totalGames: 30, winGames: 20, loseGames: 10, averageTurns: 4 },
         { user: "Tom", totalGames: 20, winGames: 5, loseGames: 15, averageTurns: 3 },
+        { user: "Tom", totalGames: 20, winGames: 5, loseGames: 15, averageTurns: 3 },
+        { user: "Tom", totalGames: 20, winGames: 5, loseGames: 15, averageTurns: 3 },
+        { user: "Tom", totalGames: 20, winGames: 5, loseGames: 15, averageTurns: 3 },
+        { user: "Tom", totalGames: 20, winGames: 5, loseGames: 15, averageTurns: 3 },
+        { user: "Tom", totalGames: 20, winGames: 5, loseGames: 15, averageTurns: 3 },
+        { user: "Tom", totalGames: 20, winGames: 5, loseGames: 15, averageTurns: 3 },
+        { user: "Tom", totalGames: 20, winGames: 5, loseGames: 15, averageTurns: 3 },
+        { user: "Tom", totalGames: 20, winGames: 5, loseGames: 15, averageTurns: 3 },
+        { user: "Tom", totalGames: 20, winGames: 5, loseGames: 15, averageTurns: 3 },
+        { user: "Tom", totalGames: 20, winGames: 5, loseGames: 15, averageTurns: 3 },
+        { user: "Tom", totalGames: 20, winGames: 5, loseGames: 15, averageTurns: 3 },
     ];
 
     const [currentTab, setCurrentTab] = useState("all");
@@ -77,7 +88,7 @@ function StatsScreen() {
                         </select>
                     </div>
                 </div>
-                <div>
+                <div className="table-container">
                     <table className="table table-striped">
                         <thead>
                             <tr>
