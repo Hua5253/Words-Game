@@ -26,7 +26,7 @@ function setCookie() {
 }
 
 // Function to get the value of a cookie
-function getCookie(name: String) {
+export function getCookie(name: String) {
     const cookies = document.cookie.split("; ");
     for (const cookie of cookies) {
         const [cookieName, cookieValue] = cookie.split("=");

@@ -8,11 +8,11 @@ export default function GameScreen() {
     const socket = useContext(SocketContext);
 
     return (
-        <div className='gamescreen position-relative '>
+        <div className="gamescreen position-relative ">
             {/* Game Record Board */}
             <GameBoard />
             {/* Chat Box */}
-            <div className='chat'>
+            <div className="chat">
                 <ChatBox socket={socket} />
             </div>
         </div>

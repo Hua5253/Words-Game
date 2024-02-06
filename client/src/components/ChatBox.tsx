@@ -31,7 +31,7 @@ function ChatBox({ socket }: Props) {
     };
 
     // receive message
-    socket.on("chat message", data => {
+    socket.on("chat message", (data) => {
         data.isOwnMessage = false;
         setMessages([...messages, data]);
     });
@@ -39,8 +39,8 @@ function ChatBox({ socket }: Props) {
     return (
         <div>
             <h1>Chat</h1>
-            <div className='main'>
-                <ul className='message-container' id='message-container'>
+            <div className="main">
+                <ul className="message-container" id="message-container">
                     {messages.map((data, index) => (
                         <li
                             key={index}
@@ -50,24 +50,24 @@ function ChatBox({ socket }: Props) {
                                     : "message-left"
                             }
                         >
-                            <p className='message'>{data.message}</p>
+                            <p className="message">{data.message}</p>
                         </li>
                     ))}
                 </ul>
                 <form
-                    className='message-form'
-                    id='message-form'
+                    className="message-form"
+                    id="message-form"
                     onSubmit={handleSubmit}
                 >
                     <input
                         ref={messageRef}
-                        type='text'
-                        name='message'
-                        id='message-input'
-                        className='message-input'
+                        type="text"
+                        name="message"
+                        id="message-input"
+                        className="message-input"
                     />
-                    <div className='v-divider'></div>
-                    <button type='submit' className='send-button'>
+                    <div className="v-divider"></div>
+                    <button type="submit" className="send-button">
                         send
                     </button>
                 </form>

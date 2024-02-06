@@ -1,12 +1,15 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import PlayerMoveRecord from "./PlayerMoveRecord";
 import { wordToGuessSchema, yourGuessScheme } from "../data/validate";
+import { getCookie } from "./GetUser";
 
 export default function GameBoard() {
     const [wordToGuess, setWordToGuess] = useState<string>("");
     const [yourGuess, setYourGuess] = useState<string>("");
     const [wordToGuessError, setWordToGuessError] = useState<string>("");
     const [wordSend, setWordSend] = useState<boolean>(false);
+
+    // receive message
 
     const handleWordToGuessChange = (e: ChangeEvent<HTMLInputElement>) => {
         setWordToGuess(e.target.value);
@@ -57,6 +60,7 @@ export default function GameBoard() {
         //if wrong display data
 
         //if right move on (display the game result page)
+        //make a prop that is sent down to playermoverecord component
 
         setYourGuess("");
     };
@@ -65,10 +69,10 @@ export default function GameBoard() {
         <div className="gameComponents">
             <div className="record">
                 <div className="pe-2 g-col-6">
-                    <PlayerMoveRecord />
+                    <PlayerMoveRecord player={getCookie("name")} />
                 </div>
                 <div className="g-col-6">
-                    <PlayerMoveRecord />
+                    <PlayerMoveRecord player="opponent" />
                 </div>
             </div>
 
