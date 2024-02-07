@@ -30,20 +30,26 @@ function StatsScreen() {
     }, [sortBy]);
 
     const getData = () => {
-        switch (sortBy) {
-            case "1":
-                setData(mockData.sort((a, b) => b.winGames - a.winGames));
-                break;
-            case "2":
-                setData(mockData.sort((a, b) => a.averageTurns - b.averageTurns));
-                break;
-            case "3":
-                setData(mockData.sort((a, b) => b.totalGames - a.totalGames));
-                break;
-            default:
-                setData(mockData);
-                break;
-        }
+        // switch (sortBy) {
+        //     case "1":
+        //         setData(mockData.sort((a, b) => b.winGames - a.winGames));
+        //         break;
+        //     case "2":
+        //         setData(mockData.sort((a, b) => a.averageTurns - b.averageTurns));
+        //         break;
+        //     case "3":
+        //         setData(mockData.sort((a, b) => b.totalGames - a.totalGames));
+        //         break;
+        //     default:
+        //         setData(mockData);
+        //         break;
+        // }
+
+        fetch("http://127.0.0.1:3000/api/")
+            .then((res) => res.json())
+            .then((res) => {
+                console.log(res);
+            });
     };
 
     const handleChangeTab = (tab: string) => {
