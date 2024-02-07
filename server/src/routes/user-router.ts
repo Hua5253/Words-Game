@@ -3,7 +3,8 @@ import * as UserController from '../controllers/user-controller'
 
 const router = express.Router();
 
-router.get('/', UserController.getUsers);
+router.get('/users', UserController.getUsers);
+router.get('/currentUser', UserController.getCurrentUser);
 
 router.get('/wins', UserController.getUsersByWins);
 router.get('/gamesPlayed', UserController.getUsersByGamesPlayed);
