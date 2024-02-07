@@ -1,13 +1,14 @@
-export default function PlayerMoveRecord() {
-    const player1Name = document.cookie.split("; ")[1].split("=")[1];
-    const player2Name = "";
+interface Props {
+    playerName: string;
+}
 
+export default function PlayerMoveRecord({ playerName }: Props) {
     return (
-        <div className='recordlist'>
-            <table className='table table-bordered playertable'>
+        <div className="recordlist">
+            <table className="table table-bordered playertable">
                 <thead>
                     <tr>
-                        <th>Player {player1Name}</th>
+                        <th>Player {playerName}</th>
                     </tr>
                 </thead>
                 <tbody>
