@@ -46,15 +46,13 @@ io.on("connection", (socket: Socket) => {
                 player2.to(roomId).emit("chat message", data);
             });
 
-            player1.on("guessWordReady", (wordToGuess, playerName) => {
-                console.log(wordToGuess, playerName);
+            player1.on("guessWordReady", (wordToGuess) => {
+                console.log(wordToGuess);
                 player1.to(roomId).emit("guessWord", wordToGuess);
-                player1.to(roomId).emit("playerName", playerName);
             });
-            player2.on("guessWordReady", (wordToGuess, playerName) => {
-                console.log(wordToGuess, playerName);
+            player2.on("guessWordReady", (wordToGuess) => {
+                console.log(wordToGuess);
                 player2.to(roomId).emit("guessWord", wordToGuess);
-                player2.to(roomId).emit("playerName", playerName);
             });
         }
     });

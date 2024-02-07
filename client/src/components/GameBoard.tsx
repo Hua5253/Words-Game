@@ -12,7 +12,9 @@ export default function GameBoard({ socket }: Props) {
     const [wordToGuess, setWordToGuess] = useState<string>("");
     const [yourGuess, setYourGuess] = useState<string>("");
     const [wordToGuessError, setWordToGuessError] = useState<string>("");
+    const [yourGuessError, setYourGuessError] = useState<string>("");
     const [wordSend, setWordSend] = useState<boolean>(false);
+    const [start, setStart] = useState<boolean>(false);
 
     const opponent = "opponent";
 
@@ -25,11 +27,8 @@ export default function GameBoard({ socket }: Props) {
 
     socket.on("guessWord", (wordToGuess) => {
         console.log(wordToGuess);
+        setStart(true);
     });
-    socket.on("playerName", (playerName) => {
-        console.log(playerName);
-    });
-
     const submitWordToGuess = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
@@ -46,7 +45,7 @@ export default function GameBoard({ socket }: Props) {
             setWordSend(true);
 
             //following is sending the word to the back end
-            socket.emit("guessWordReady", wordToGuess, playerName);
+            socket.emit("guessWordReady", wordToGuess);
         }
 
         setWordToGuess("");
@@ -54,11 +53,11 @@ export default function GameBoard({ socket }: Props) {
 
     const handleYourGuessChange = (e: ChangeEvent<HTMLInputElement>) => {
         setYourGuess(e.target.value);
+        setYourGuessError("");
     };
 
     const submitYourGuess = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        alert("Your Guess is: " + yourGuess);
 
         //Here is where you then verify if the word set is valid
         const { error } = yourGuessScheme.validate(yourGuess);
@@ -66,6 +65,10 @@ export default function GameBoard({ socket }: Props) {
         //first check if the word set is valid in terms of if it is a valid word
         if (error) {
             console.log(error);
+            setYourGuessError(error.details[0].message);
+        } else {
+            alert("Your Guess is: " + yourGuess);
+            setYourGuessError("");
         }
 
         //then sent to back end socket.emit....
@@ -117,6 +120,9 @@ export default function GameBoard({ socket }: Props) {
             </div>
             <div id="guess-input">
                 <form className="input-group mb-3" onSubmit={submitYourGuess}>
+                    {yourGuessError && (
+                        <div style={{ color: "red" }}>{yourGuessError}</div>
+                    )}
                     <input
                         type="text"
                         placeholder="Enter your word"
@@ -124,9 +130,13 @@ export default function GameBoard({ socket }: Props) {
                         value={yourGuess}
                         id="yourGuess"
                         name="yourGuess"
-                        disabled //I think this should be toggled when opponent sent the word over (same with the button)
+                        disabled={start ? false : true} //I think this should be toggled when opponent sent the word over (same with the button)
                     />
-                    <button className="btn btn-primary" type="submit" disabled>
+                    <button
+                        className="btn btn-primary"
+                        type="submit"
+                        disabled={start ? false : true}
+                    >
                         Guess
                     </button>
                 </form>
