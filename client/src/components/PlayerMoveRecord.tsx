@@ -1,10 +1,13 @@
 export default function PlayerMoveRecord() {
+    const player1Name = document.cookie.split("; ")[1].split("=")[1];
+    const player2Name = "";
+
     return (
-        <div className="recordlist">
-            <table className="table table-bordered playertable">
+        <div className='recordlist'>
+            <table className='table table-bordered playertable'>
                 <thead>
                     <tr>
-                        <th>Player ___</th>
+                        <th>Player {player1Name}</th>
                     </tr>
                 </thead>
                 <tbody>

@@ -10,7 +10,7 @@ export default function GameScreen() {
     return (
         <div className='gamescreen position-relative '>
             {/* Game Record Board */}
-            <GameBoard />
+            <GameBoard socket={socket} />
             {/* Chat Box */}
             <div className='chat'>
                 <ChatBox socket={socket} />

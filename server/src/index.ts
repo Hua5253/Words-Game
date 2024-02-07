@@ -41,16 +41,27 @@ io.on('connection', (socket: Socket) => {
             io.to(roomId).emit('matchFound', { roomId });
             player1.on("message", (data) => {
               player1.to(roomId).emit("chat message", data);
-            })
+            });
             player2.on("message", (data) => {
               player2.to(roomId).emit("chat message", data);
-            })
+            });
+
+            player1.on("guessWordReady", (wordToGuess, playerName) => {
+                console.log(wordToGuess, playerName);
+                player1.to(roomId).emit("guessWord", wordToGuess);
+                player1.to(roomId).emit("playerName", playerName);
+            });
+            player2.on("guessWordReady", (wordToGuess, playerName) => {
+                console.log(wordToGuess, playerName);
+                player2.to(roomId).emit("guessWord", wordToGuess);
+                player2.to(roomId).emit("playerName", playerName);
+          });
         }
     });
 
     socket.on('disconnect', () => {
         waitingPlayers = waitingPlayers.filter(player => player.id !== socket.id);
-        console.log('User disconnected', socket.id);
+        // console.log('User disconnected', socket.id);
     });
 });
 
