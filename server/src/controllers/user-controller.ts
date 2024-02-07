@@ -367,6 +367,7 @@ export const getLastHourByTurns: RequestHandler = async(request, response, next)
 
 
 
+
 // creates a new user based on request body's name
 export const creatUser: RequestHandler = async(request, response, next) =>{
     const name = request.body.name;
@@ -379,11 +380,33 @@ export const creatUser: RequestHandler = async(request, response, next) =>{
             name: name,
         });
         
+        request.session.userId = newUser._id;
+
         response.status(201).json(newUser);
     } catch (error) {
         next(error);
     }
 };
+
+export const getCurrentUser: RequestHandler = async(request, response, next) =>{
+    const userId = request.session.userId;
+    console.log("userid: "+ {userId});
+    try {
+        if(!userId){
+            return response.status(400).json({ error: 'user not found' });
+        }
+
+        const user = await UserModel.findById(userId).exec();
+        if (!user) {
+            return response.status(404).json({ error: 'User not found in the database' });
+        }
+        response.status(200).json(user);
+
+    } catch (error) {
+        console.error(error);
+        next(error);
+    }
+}
 
 //adds a match to a used based on userId, include match info in the request body and userId in params
 export const updateUser: RequestHandler = async(request, response, next) =>{
