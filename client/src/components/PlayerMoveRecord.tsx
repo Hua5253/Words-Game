@@ -8,7 +8,6 @@ interface Props {
 }
 
 export default function PlayerMoveRecord({guessResults, name} : Props) {
-    console.log(guessResults);
 
     return (
         <div className="recordlist">

@@ -22,7 +22,6 @@ function HomeScreen() {
             socket.emit("playerName", playerName);
 
             socket.on("player-name", (playerName) => {
-                console.log(playerName);
                 setOpponentName(playerName);
             });
         });

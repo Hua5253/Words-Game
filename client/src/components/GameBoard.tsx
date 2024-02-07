@@ -94,7 +94,6 @@ export default function GameBoard() {
         const correctCharacters = check(yourGuess, opponentWordToGuess);
         const myGuessResult: GuessResult = {guess: yourGuess, corrects: correctCharacters};
         setMyGuessResults([...myGuessResults, myGuessResult]);
-        console.log(myGuessResults);
 
         setYourGuess("");
     };
@@ -121,7 +120,7 @@ export default function GameBoard() {
                     <PlayerMoveRecord guessResults={myGuessResults} name={userName} />
                 </div>
                 <div className='g-col-6'>
-                    {/* <PlayerMoveRecord /> */}
+                    <PlayerMoveRecord guessResults={myGuessResults} name={opponentName}/>
                 </div>
             </div>
 
