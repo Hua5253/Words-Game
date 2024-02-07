@@ -4,7 +4,9 @@ import { Server, Socket } from 'socket.io';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import userRouter from './routes/user-router'
-
+import session from 'express-session';
+import cookieParser from 'cookie-parser';
+import MongoStore from 'connect-mongo';
 
 const app = express();
 const server = http.createServer(app);
@@ -55,7 +57,7 @@ io.on('connection', (socket: Socket) => {
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
-const DATAPORT = 5000;
+export const DATAPORT = 8000;
 const MongoDBURL = 'mongodb://localhost:27017/word-game';
 
 mongoose
@@ -69,7 +71,22 @@ mongoose
 });
 
 app.use(express.json())
+app.use(cookieParser());
 
+app.use(
+  session({
+    secret: 'aw1sdwl$ak', 
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days in milliseconds
+    },
+    rolling: true,
+    store: MongoStore.create({
+      mongoUrl: MongoDBURL
+    }),
+  })
+);
 
 app.use("/api", userRouter);
 
