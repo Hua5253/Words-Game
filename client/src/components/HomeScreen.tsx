@@ -20,6 +20,10 @@ function HomeScreen() {
             setLoadingGame(false);
 
             socket.emit("playerName", playerName);
+
+            socket.on("player-name", (playerName) => {
+
+            });
         });
 
         return () => {

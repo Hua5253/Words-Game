@@ -1,7 +1,12 @@
 import { ChangeEvent, FormEvent, useContext, useEffect, useState } from "react";
 import PlayerMoveRecord from "./PlayerMoveRecord";
-import { wordToGuessSchema, yourGuessScheme } from "../data/validate";
+import { wordToGuessSchema, yourGuessScheme } from '../data/validate';
 import { SocketContext } from "./SocketContext";
+
+interface GuessResult {
+    guess: string,
+    corrects: number
+}
 
 export default function GameBoard() {
     const [wordToGuess, setWordToGuess] = useState<string>("");
@@ -9,25 +14,26 @@ export default function GameBoard() {
     const [wordToGuessError, setWordToGuessError] = useState<string>("");
     const [wordSend, setWordSend] = useState<boolean>(false);
     const [opponentWordToGuess, setOpponentWordToGuess] = useState("");
-    const [opponentName, setOpponentName] = useState<string>("opponent");
+    const [myGuessResults, setMyGuessResults] = useState<GuessResult[]>([]);
 
     const socket = useContext(SocketContext);
 
     const playerName = document.cookie.split("; ")[1].split("=")[1];
 
     useEffect(() => {
-        socket.on("player-name", (playerName) => {
-            console.log("hello world");
-            setOpponentName(opponentName);
-        });
         socket.on("guessWord", wordToGuess => {
             console.log(wordToGuess);
             setOpponentWordToGuess(wordToGuess);
         });
+
+        return () => {
+            socket.off("player-name");
+            socket.off("guessWord");
+        };
     }, []);
 
-    console.log("opponent name ", opponentName);
-    console.log(opponentWordToGuess);
+    // console.log("opponent name ", opponentName);
+    // console.log(opponentWordToGuess);
 
     const handleWordToGuessChange = (e: ChangeEvent<HTMLInputElement>) => {
         setWordToGuess(e.target.value);
@@ -62,7 +68,6 @@ export default function GameBoard() {
 
     const submitYourGuess = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        alert("Your Guess is: " + yourGuess);
 
         //Here is where you then verify if the word set is valid
         const { error } = yourGuessScheme.validate(yourGuess);
@@ -70,26 +75,49 @@ export default function GameBoard() {
         //first check if the word set is valid in terms of if it is a valid word
         if (error) {
             console.log(error);
+            return;
         }
 
-        //then sent to back end socket.emit....
+        console.log("your guess: ",yourGuess);
 
-        //then has a socket.on... to catch a signal of rather the word is right or wrong
-        //if wrong display data
+        // guess is correct
+        if(yourGuess.toLowerCase() === opponentWordToGuess.toLowerCase()) {
+            console.log("go to game result modal");
+            // send the result to the server
+        }
 
-        //if right move on (display the game result page)
+        // guess is not correct
+        const correctCharacters = check(yourGuess, opponentWordToGuess);
+        const myGuessResult: GuessResult = {guess: yourGuess, corrects: correctCharacters};
+        setMyGuessResults([...myGuessResults, myGuessResult]);
+        console.log(myGuessResults);
 
         setYourGuess("");
     };
+
+    function check(ans: string, ver: string) {
+        let c = 0;
+        ans = ans.toLowerCase();
+        ver = ver.toLowerCase();
+    
+        for (let i = 0; i < ans.length; i++) {
+          for (let j = 0; j < ver.length; j++) {
+            if (ans[i] == ver[j]) {
+              c += 1;
+            }
+          }
+        }
+        return c;
+    }
 
     return (
         <div className='gameComponents'>
             <div className='record'>
                 <div className='pe-2 g-col-6'>
-                    <PlayerMoveRecord />
+                    <PlayerMoveRecord guessResults={myGuessResults}/>
                 </div>
                 <div className='g-col-6'>
-                    <PlayerMoveRecord />
+                    {/* <PlayerMoveRecord /> */}
                 </div>
             </div>
 
@@ -126,9 +154,9 @@ export default function GameBoard() {
                         value={yourGuess}
                         id='yourGuess'
                         name='yourGuess'
-                        disabled //I think this should be toggled when opponent sent the word over (same with the button)
+                        // disabled
                     />
-                    <button className='btn btn-primary' type='submit' disabled>
+                    <button className='btn btn-primary' type='submit'>
                         Guess
                     </button>
                 </form>
