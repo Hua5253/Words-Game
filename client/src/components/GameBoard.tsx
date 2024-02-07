@@ -2,6 +2,12 @@ import { ChangeEvent, FormEvent, useContext, useEffect, useState } from "react";
 import PlayerMoveRecord from "./PlayerMoveRecord";
 import { wordToGuessSchema, yourGuessScheme } from "../data/validate";
 import { SocketContext } from "./SocketContext";
+import { useLocation } from "react-router-dom";
+
+interface NavigationState {
+    userName: string;
+    opponentName: string;
+}
 
 export default function GameBoard() {
     const [wordToGuess, setWordToGuess] = useState<string>("");
@@ -9,25 +15,18 @@ export default function GameBoard() {
     const [wordToGuessError, setWordToGuessError] = useState<string>("");
     const [wordSend, setWordSend] = useState<boolean>(false);
     const [opponentWordToGuess, setOpponentWordToGuess] = useState("");
-    const [opponentName, setOpponentName] = useState<string>("opponent");
+
+    const location = useLocation();
+    const { userName, opponentName }: NavigationState = location.state || {}; // Destructure the passed state
 
     const socket = useContext(SocketContext);
 
-    const playerName = document.cookie.split("; ")[1].split("=")[1];
-
     useEffect(() => {
-        socket.on("player-name", (playerName) => {
-            console.log("hello world");
-            setOpponentName(opponentName);
-        });
-        socket.on("guessWord", wordToGuess => {
+        socket.on("guessWord", (wordToGuess) => {
             console.log(wordToGuess);
             setOpponentWordToGuess(wordToGuess);
         });
     }, []);
-
-    console.log("opponent name ", opponentName);
-    console.log(opponentWordToGuess);
 
     const handleWordToGuessChange = (e: ChangeEvent<HTMLInputElement>) => {
         setWordToGuess(e.target.value);
@@ -83,52 +82,52 @@ export default function GameBoard() {
     };
 
     return (
-        <div className='gameComponents'>
-            <div className='record'>
-                <div className='pe-2 g-col-6'>
-                    <PlayerMoveRecord />
+        <div className="gameComponents">
+            <div className="record">
+                <div className="pe-2 g-col-6">
+                    <PlayerMoveRecord name={userName} />
                 </div>
-                <div className='g-col-6'>
-                    <PlayerMoveRecord />
+                <div className="g-col-6">
+                    <PlayerMoveRecord name={opponentName} />
                 </div>
             </div>
 
             {/* Input box */}
-            <div id='token-input'>
-                <form className='input-group mb-3' onSubmit={submitWordToGuess}>
+            <div id="token-input">
+                <form className="input-group mb-3" onSubmit={submitWordToGuess}>
                     {wordToGuessError && (
                         <div style={{ color: "red" }}>{wordToGuessError}</div>
                     )}
                     <input
-                        type='text'
-                        placeholder='Word for your opponent to guess'
+                        type="text"
+                        placeholder="Word for your opponent to guess"
                         onChange={handleWordToGuessChange}
                         value={wordToGuess}
-                        id='wordToGuess'
-                        name='wordToGuess'
+                        id="wordToGuess"
+                        name="wordToGuess"
                         disabled={wordSend ? true : false}
                     />
                     <button
-                        className='btn btn-primary'
-                        type='submit'
+                        className="btn btn-primary"
+                        type="submit"
                         disabled={wordSend ? true : false}
                     >
                         Send to Opponent
                     </button>
                 </form>
             </div>
-            <div id='guess-input'>
-                <form className='input-group mb-3' onSubmit={submitYourGuess}>
+            <div id="guess-input">
+                <form className="input-group mb-3" onSubmit={submitYourGuess}>
                     <input
-                        type='text'
-                        placeholder='Enter your word'
+                        type="text"
+                        placeholder="Enter your word"
                         onChange={handleYourGuessChange}
                         value={yourGuess}
-                        id='yourGuess'
-                        name='yourGuess'
+                        id="yourGuess"
+                        name="yourGuess"
                         disabled //I think this should be toggled when opponent sent the word over (same with the button)
                     />
-                    <button className='btn btn-primary' type='submit' disabled>
+                    <button className="btn btn-primary" type="submit" disabled>
                         Guess
                     </button>
                 </form>

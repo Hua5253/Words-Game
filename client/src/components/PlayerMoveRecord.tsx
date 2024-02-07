@@ -1,10 +1,14 @@
-export default function PlayerMoveRecord() {
+interface Props {
+    name: string;
+}
+
+export default function PlayerMoveRecord({ name }: Props) {
     return (
         <div className="recordlist">
             <table className="table table-bordered playertable">
                 <thead>
                     <tr>
-                        <th>Player </th>
+                        <th>{name} </th>
                     </tr>
                 </thead>
                 <tbody>
