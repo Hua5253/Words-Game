@@ -1,19 +1,15 @@
-import { FormEvent, useRef, useState } from "react";
+import { FormEvent, useContext, useRef, useState } from "react";
 import "../CSS/ChatBox.css";
-import { Socket } from "socket.io-client";
-
-interface Props {
-    socket: Socket;
-}
-
+import { SocketContext } from './SocketContext';
 interface Message {
     message: string;
     isOwnMessage: boolean;
 }
 
-function ChatBox({ socket }: Props) {
+function ChatBox() {
     const messageRef = useRef<HTMLInputElement>(null);
     const [messages, setMessages] = useState<Message[]>([]);
+    const socket = useContext(SocketContext);
 
     const handleSubmit = (event: FormEvent) => {
         event.preventDefault();

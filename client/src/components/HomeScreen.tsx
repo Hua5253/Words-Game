@@ -12,11 +12,14 @@ function HomeScreen() {
     const [loadingGame, setLoadingGame] = useState(false);
     const [showCountDownModal, setShowCountDownModal] = useState(false);
 
+    const playerName = document.cookie.split("; ")[1].split("=")[1];
+
     useEffect(() => {
-        socket.on("matchFound", (data: { roomId: string }) => {
-            // console.log("Match found!", data);
+        socket.on("matchFound", () => {
             setShowCountDownModal(true);
             setLoadingGame(false);
+
+            socket.emit("playerName", playerName);
         });
 
         return () => {

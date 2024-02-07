@@ -1,19 +1,33 @@
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useContext, useEffect, useState } from "react";
 import PlayerMoveRecord from "./PlayerMoveRecord";
 import { wordToGuessSchema, yourGuessScheme } from "../data/validate";
-import { Socket } from "socket.io-client";
+import { SocketContext } from "./SocketContext";
 
-interface Props {
-    socket: Socket;
-}
-
-export default function GameBoard({ socket }: Props) {
+export default function GameBoard() {
     const [wordToGuess, setWordToGuess] = useState<string>("");
     const [yourGuess, setYourGuess] = useState<string>("");
     const [wordToGuessError, setWordToGuessError] = useState<string>("");
     const [wordSend, setWordSend] = useState<boolean>(false);
+    const [opponentWordToGuess, setOpponentWordToGuess] = useState("");
+    const [opponentName, setOpponentName] = useState<string>("opponent");
+
+    const socket = useContext(SocketContext);
 
     const playerName = document.cookie.split("; ")[1].split("=")[1];
+
+    useEffect(() => {
+        socket.on("player-name", (playerName) => {
+            console.log("hello world");
+            setOpponentName(opponentName);
+        });
+        socket.on("guessWord", wordToGuess => {
+            console.log(wordToGuess);
+            setOpponentWordToGuess(wordToGuess);
+        });
+    }, []);
+
+    console.log("opponent name ", opponentName);
+    console.log(opponentWordToGuess);
 
     const handleWordToGuessChange = (e: ChangeEvent<HTMLInputElement>) => {
         setWordToGuess(e.target.value);
@@ -36,13 +50,7 @@ export default function GameBoard({ socket }: Props) {
             setWordSend(true);
 
             //following is sending the word to the back end
-            socket.emit("guessWordReady", wordToGuess, playerName);
-            socket.on("guessWord", wordToGuess => {
-                console.log(wordToGuess);
-            });
-            socket.on("playerName", playerName => {
-                console.log(playerName);
-            });
+            socket.emit("guessWordReady", wordToGuess);
         }
 
         setWordToGuess("");
@@ -78,10 +86,10 @@ export default function GameBoard({ socket }: Props) {
         <div className='gameComponents'>
             <div className='record'>
                 <div className='pe-2 g-col-6'>
-                    <PlayerMoveRecord />
+                    <PlayerMoveRecord name={playerName}/>
                 </div>
                 <div className='g-col-6'>
-                    <PlayerMoveRecord />
+                    <PlayerMoveRecord name={opponentName}/>
                 </div>
             </div>
 
