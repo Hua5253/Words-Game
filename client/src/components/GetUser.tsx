@@ -8,7 +8,7 @@ const generateName = () => {
     return randadj + randanim;
 };
 function checkFirstVisit() {
-    const visitedCookie = getCookie("visited");
+    const visitedCookie = api.getCookie("visited");
     // If the cookie doesn't exist, set it
     if (!visitedCookie) {
         
@@ -34,25 +34,13 @@ function checkFirstVisit() {
 }
 
 
-// Function to get the value of a cookie
-function getCookie(name: String) {
-    const cookies = document.cookie.split("; ");
-    for (const cookie of cookies) {
-        const [cookieName, cookieValue] = cookie.split("=");
-        if (cookieName === name) {
-            return cookieValue;
-        }
-    }
-    return null;
-}
-
 export default function GetUser() {
     const [name, setName] = useState("");
 
     useEffect(() => {
         checkFirstVisit();
         const fetchName = async () => {
-            const userName = await getCookie("name");
+            const userName =  api.getCookie("name");
             if (userName !== null) {
                 setName(userName);
             } else {
