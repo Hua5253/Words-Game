@@ -7,21 +7,10 @@ const api = axios.create({
 
 export const getUsers = () => api.get('/users');
 
-export const getCurrentUser = () => api.get('/currentUser');
-
-export const getUsersByWins = () => api.get('/wins');
-
-export const getUsersByGamesPlayed = () => api.get('/gamesPlayed');
-
-export const getUsersByTurns = () => api.get('/turns');
+// export const getCurrentUser = () => api.get('/currentUser');
 
 export const getLastHour = () => api.get('/lasthour');
 
-export const getLastHourByWins = () => api.get('/lasthour/wins');
-
-export const getLastHourByTurns = () => api.get('/lasthour/turns');
-
-export const getLastHourByGamesPlayed = () => api.get('/lasthour/gamesPlayed');
 
 export const creatUser = (newUser: string) => {
     return api.post('/', {
@@ -45,16 +34,23 @@ export const updateuser = (userId: string, match: newMatch) => {
 export const getUser = (userId: string) => api.get(`/${userId}`);
 
 
+export interface user{
+    name: String
+}
+
+export const getUserByName = (findName: string) => {
+    return api.get(`/name`, {
+        params: {
+            name: findName,
+        },
+    });
+}
+
+
 const apis ={
     getUsers,
-    getCurrentUser,
-    getUsersByWins,
-    getUsersByGamesPlayed,
-    getUsersByTurns,
+    getUserByName,
     getLastHour,
-    getLastHourByWins,
-    getLastHourByTurns,
-    getLastHourByGamesPlayed,
     creatUser,
     updateuser,
     getUser,
