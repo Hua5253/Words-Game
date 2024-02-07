@@ -4,9 +4,10 @@ import * as UserController from '../controllers/user-controller'
 const router = express.Router();
 
 router.get('/users', UserController.getUsers);
-router.get('/currentUser', UserController.getCurrentUser);
+// router.get('/currentUser', UserController.getCurrentUser);
 
 router.get('/lasthour', UserController.getLastHour);
+router.get('/name', UserController.getUserByName);
 
 router.post('/', UserController.creatUser);
 router.patch('/:userId', UserController.updateUser);

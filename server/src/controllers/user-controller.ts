@@ -69,6 +69,27 @@ export const getUser: RequestHandler = async(request, response, next) =>{
 	}
 };
 
+export const getUserByName: RequestHandler = async(request, response, next) =>{
+    const userName = request.body.name;
+	try {
+        const userName = request.query.name;
+		const user = await UserModel.findOne({ 
+            name: userName 
+        })
+        .exec();
+        if(user){
+            response.status(200).json(user);
+        }
+        else{
+            return response.status(404).json({ error: 'User not found in the database' });
+        }
+		
+
+	} catch (error) {
+		next(error);
+	}
+};
+
 // returns all user with matches within the last hour
 export const getLastHour: RequestHandler = async(request, response, next) =>{
     try {
@@ -175,25 +196,25 @@ export const creatUser: RequestHandler = async(request, response, next) =>{
     }
 };
 
-export const getCurrentUser: RequestHandler = async(request, response, next) =>{
-    const userId = request.session.userId;
-    console.log("userid: "+ {userId});
-    try {
-        if(!userId){
-            return response.status(400).json({ error: 'user not found' });
-        }
+// export const getCurrentUser: RequestHandler = async(request, response, next) =>{
+//     const userId = request.session.userId;
+//     console.log("userid: "+ {userId});
+//     try {
+//         if(!userId){
+//             return response.status(400).json({ error: 'user not found' });
+//         }
 
-        const user = await UserModel.findById(userId).exec();
-        if (!user) {
-            return response.status(404).json({ error: 'User not found in the database' });
-        }
-        response.status(200).json(user);
+//         const user = await UserModel.findById(userId).exec();
+//         if (!user) {
+//             return response.status(404).json({ error: 'User not found in the database' });
+//         }
+//         response.status(200).json(user);
 
-    } catch (error) {
-        console.error(error);
-        next(error);
-    }
-}
+//     } catch (error) {
+//         console.error(error);
+//         next(error);
+//     }
+// }
 
 //adds a match to a used based on userId, include match info in the request body and userId in params
 export const updateUser: RequestHandler = async(request, response, next) =>{

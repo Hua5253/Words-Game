@@ -9,23 +9,23 @@ const generateName = () => {
 };
 function checkFirstVisit() {
     const visitedCookie = getCookie("visited");
-
+    // If the cookie doesn't exist, set it
     if (!visitedCookie) {
-        // If the cookie doesn't exist, set it
-        setCookie(); 
-
-        // document.cookie = `visited=true;path=/`;
-        // async function createUser(){
-        //     let name: string = generateName();
-            
-        //     try {
-        //         const response = await api.creatUser(name);
-
-        //     } catch (error) {
-        //         console.log(error);
-        //     }
-        // }
-        // createUser();
+        
+        document.cookie = `visited=true;path=/`;        
+        async function createUser(){
+            let name: string = generateName();
+            try {
+                const user_info = await api.creatUser(name);
+                document.cookie = `name=${name};path=/`;
+                console.log(user_info);
+                const userId = user_info.data._id;
+                document.cookie = `userId=${userId};path=/`
+            } catch (error) {
+                console.log("error creating user");
+            }
+        }
+        createUser();
 
         console.log("First time visit! Cookie set.");
     } else {
@@ -33,12 +33,6 @@ function checkFirstVisit() {
     }
 }
 
-// Function to set a cookie
-function setCookie() {
-    document.cookie = `visited=true;path=/`;
-    let name = generateName();
-    document.cookie = `name=${name};path=/`;
-}
 
 // Function to get the value of a cookie
 function getCookie(name: String) {
@@ -58,26 +52,16 @@ export default function GetUser() {
     useEffect(() => {
         checkFirstVisit();
         const fetchName = async () => {
-            const newName = await getCookie("name");
-            if (newName !== null) {
-                setName(newName);
+            const userName = await getCookie("name");
+            if (userName !== null) {
+                setName(userName);
             } else {
                 setName("error");
             }
-
-            // const userId_response = await api.getCurrentUser();
-            // const userId: string = userId_response.data._id;
-            // console.log(userId_response);
-
-            // const userName_response = await api.getUser("65c12a63099076f92fc9f73a");
-            // const userName = userName_response.data.name;
-            // console.log(userName_response);
-
-            // setName(userName);
         };
 
         fetchName();
-    }, []);
+    });
 
     return <div className="greeting">Hello, {name}!</div>;
 }
