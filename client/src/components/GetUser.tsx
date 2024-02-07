@@ -16,8 +16,8 @@ function checkFirstVisit() {
         async function createUser(){
             let name: string = generateName();
             try {
-                const user_info = await api.creatUser(name);
                 document.cookie = `name=${name};path=/`;
+                const user_info = await api.creatUser(name);
                 console.log(user_info);
                 const userId = user_info.data._id;
                 document.cookie = `userId=${userId};path=/`
