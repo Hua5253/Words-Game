@@ -1,13 +1,13 @@
-
 interface GuessResult {
     guess: string,
     corrects: number
 }
 interface Props {
     guessResults: GuessResult[];
+    name: string;
 }
 
-export default function PlayerMoveRecord({guessResults} : Props) {
+export default function PlayerMoveRecord({guessResults, name} : Props) {
     console.log(guessResults);
 
     return (
@@ -15,7 +15,7 @@ export default function PlayerMoveRecord({guessResults} : Props) {
             <table className="table table-bordered playertable">
                 <thead>
                     <tr>
-                        <th>Player</th>
+                        <th>{name}</th>
                     </tr>
                 </thead>
                 <tbody>

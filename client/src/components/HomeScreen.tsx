@@ -2,7 +2,7 @@ import CountDownModal from "./CountDownModal";
 import { useNavigate } from "react-router-dom";
 import "../CSS/HomeScreen.css";
 import LoadingModal from "./LoadingModal";
-import GetUser from "./GetUser";
+import GetUser, { getCookie } from "./GetUser";
 import { useContext, useEffect, useState } from "react";
 import { SocketContext } from "./SocketContext";
 
@@ -11,9 +11,9 @@ function HomeScreen() {
     const navigate = useNavigate();
     const [loadingGame, setLoadingGame] = useState(false);
     const [showCountDownModal, setShowCountDownModal] = useState(false);
+    const [opponentName, setOpponentName] = useState("opponent");
 
-    const playerName = document.cookie.split("; ")[1].split("=")[1];
-
+    const playerName = getCookie("name");
     useEffect(() => {
         socket.on("matchFound", () => {
             setShowCountDownModal(true);
@@ -22,12 +22,14 @@ function HomeScreen() {
             socket.emit("playerName", playerName);
 
             socket.on("player-name", (playerName) => {
-
+                console.log(playerName);
+                setOpponentName(playerName);
             });
         });
 
         return () => {
             socket.off("matchFound");
+            socket.off("player-name");
         };
     }, []);
 
@@ -78,7 +80,12 @@ function HomeScreen() {
                         timeout={3}
                         closeModal={() => {
                             setShowCountDownModal(false);
-                            navigate("/game");
+                            navigate("/game", {
+                                state: {
+                                    userName: playerName,
+                                    opponentName: opponentName,
+                                },
+                            });
                         }}
                     />
                 )}
