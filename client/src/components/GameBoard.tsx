@@ -1,8 +1,9 @@
 import { ChangeEvent, FormEvent, useContext, useEffect, useState } from "react";
 import PlayerMoveRecord from "./PlayerMoveRecord";
-import { wordToGuessSchema, yourGuessScheme } from '../data/validate';
+import { wordToGuessSchema, yourGuessScheme } from "../data/validate";
 import { SocketContext } from "./SocketContext";
 import { useLocation } from "react-router-dom";
+import ResultModal from "./ResultModel";
 
 interface NavigationState {
     userName: string;
@@ -10,8 +11,8 @@ interface NavigationState {
 }
 
 interface GuessResult {
-    guess: string,
-    corrects: number
+    guess: string;
+    corrects: number;
 }
 
 export default function GameBoard() {
@@ -21,20 +22,31 @@ export default function GameBoard() {
     const [wordSend, setWordSend] = useState<boolean>(false);
     const [opponentWordToGuess, setOpponentWordToGuess] = useState("");
     const [myGuessResults, setMyGuessResults] = useState<GuessResult[]>([]);
+    const [opponentGuessResults, setOpponentGuessResults] = useState<
+        GuessResult[]
+    >([]);
+
+    const [end, setEnd] = useState<boolean>(false);
 
     const location = useLocation();
     const { userName, opponentName }: NavigationState = location.state || {}; // Destructure the passed state
 
     const socket = useContext(SocketContext);
 
+    socket.on("opponentGuessResult", (wordResult) => {
+        console.log(wordResult);
+        setOpponentGuessResults([...opponentGuessResults, wordResult]);
+        console.log(opponentGuessResults);
+    });
+
     useEffect(() => {
-        socket.on("guessWord", wordToGuess => {
+        socket.on("guessWord", (wordToGuess) => {
             console.log(wordToGuess);
             setOpponentWordToGuess(wordToGuess);
         });
 
         return () => {
-            socket.off("player-name");
+            socket.off("opponentGuessResult");
             socket.off("guessWord");
         };
     }, []);
@@ -82,18 +94,25 @@ export default function GameBoard() {
             return;
         }
 
-        console.log("your guess: ",yourGuess);
+        console.log("your guess: ", yourGuess);
 
         // guess is correct
-        if(yourGuess.toLowerCase() === opponentWordToGuess.toLowerCase()) {
+        if (yourGuess.toLowerCase() === opponentWordToGuess.toLowerCase()) {
             console.log("go to game result modal");
-            // send the result to the server
+            // send the result to the server -> game ended signal
+            setEnd(true);
+            return;
         }
 
         // guess is not correct
         const correctCharacters = check(yourGuess, opponentWordToGuess);
-        const myGuessResult: GuessResult = {guess: yourGuess, corrects: correctCharacters};
+        const myGuessResult: GuessResult = {
+            guess: yourGuess,
+            corrects: correctCharacters,
+        };
         setMyGuessResults([...myGuessResults, myGuessResult]);
+
+        socket.emit("myGuessResult", myGuessResult);
 
         setYourGuess("");
     };
@@ -102,25 +121,31 @@ export default function GameBoard() {
         let c = 0;
         ans = ans.toLowerCase();
         ver = ver.toLowerCase();
-    
+
         for (let i = 0; i < ans.length; i++) {
-          for (let j = 0; j < ver.length; j++) {
-            if (ans[i] == ver[j]) {
-              c += 1;
+            for (let j = 0; j < ver.length; j++) {
+                if (ans[i] == ver[j]) {
+                    c += 1;
+                }
             }
-          }
         }
         return c;
     }
 
     return (
-        <div className='gameComponents'>
-            <div className='record'>
-                <div className='pe-2 g-col-6'>
-                    <PlayerMoveRecord guessResults={myGuessResults} name={userName} />
+        <div className="gameComponents">
+            <div className="record">
+                <div className="pe-2 g-col-6">
+                    <PlayerMoveRecord
+                        guessResults={myGuessResults}
+                        name={userName}
+                    />
                 </div>
-                <div className='g-col-6'>
-                    <PlayerMoveRecord guessResults={myGuessResults} name={opponentName}/>
+                <div className="g-col-6">
+                    <PlayerMoveRecord
+                        guessResults={opponentGuessResults}
+                        name={opponentName}
+                    />
                 </div>
             </div>
 
@@ -155,15 +180,16 @@ export default function GameBoard() {
                         placeholder="Enter your word"
                         onChange={handleYourGuessChange}
                         value={yourGuess}
-                        id='yourGuess'
-                        name='yourGuess'
+                        id="yourGuess"
+                        name="yourGuess"
                         // disabled
                     />
-                    <button className='btn btn-primary' type='submit'>
+                    <button className="btn btn-primary" type="submit">
                         Guess
                     </button>
                 </form>
             </div>
+            {end && <ResultModal />}
         </div>
     );
 }
