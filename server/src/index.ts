@@ -46,11 +46,9 @@ io.on("connection", (socket: Socket) => {
             });
 
             player1.on("playerName", (playerName) => {
-                console.log("player 1 is ", playerName);
                 player1.to(roomId).emit("player-name", playerName);
             });
             player2.on("playerName", (playerName) => {
-                console.log("player 2 is ", playerName);
                 player2.to(roomId).emit("player-name", playerName);
             });
 

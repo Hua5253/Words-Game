@@ -3,7 +3,9 @@ import PlayerMoveRecord from "./PlayerMoveRecord";
 import { wordToGuessSchema, yourGuessScheme } from '../data/validate';
 import { SocketContext } from "./SocketContext";
 import { useLocation } from "react-router-dom";
-
+import { getUserByName, updateuser } from "./network/user-api";
+import { getCookie } from "./GetUser";
+import { newMatch } from "./network/user-api";
 interface NavigationState {
     userName: string;
     opponentName: string;
@@ -88,6 +90,8 @@ export default function GameBoard() {
         if(yourGuess.toLowerCase() === opponentWordToGuess.toLowerCase()) {
             console.log("go to game result modal");
             // send the result to the server
+            updateUser(userName);
+            return;
         }
 
         // guess is not correct
@@ -97,6 +101,29 @@ export default function GameBoard() {
 
         setYourGuess("");
     };
+
+    async function updateUser(userName : string) {
+        const { data } = await getUserByName(userName);
+        console.log(data);
+        
+        const userId = getCookie("userId");
+        console.log(myGuessResults.length);
+        const newMatch : newMatch = {
+            won: true,
+            turns: myGuessResults.length + 1,
+            timePlayed: new Date(Date.now()),
+        }
+
+        if(userId) {
+            updateuser(userId, newMatch);
+        }
+
+        // data.avgTurns = data.avgTurns ? 
+        //     (data.avgTurns*data.totalMatches+myGuessResults.length)/(data.totalMatches+1) 
+        //     : myGuessResults.length;
+        // data.wonMatches = data.wonMatches ? data.wonMatches+1 : 1;
+        // data.totalMatches = data.totalMatches ? data.totalMatches+1 : 1;
+    }
 
     function check(ans: string, ver: string) {
         let c = 0;

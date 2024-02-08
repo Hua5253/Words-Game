@@ -45,7 +45,6 @@ export const getUsers: RequestHandler = async(request, response, next) =>{
 
         if (users){
             response.status(200).json(users);
-            console.log(users);
         }else{
             console.log('no user within the last hour');
         }
@@ -78,6 +77,7 @@ export const getUserByName: RequestHandler = async(request, response, next) =>{
         })
         .exec();
         if(user){
+            console.log(user);
             response.status(200).json(user);
         }
         else{
@@ -164,7 +164,6 @@ export const getLastHour: RequestHandler = async(request, response, next) =>{
 
         if (users) {
             response.status(200).json(users);
-            console.log(users);
         } else {
             console.log('no user within the last hour');
         }
@@ -179,7 +178,7 @@ export const getLastHour: RequestHandler = async(request, response, next) =>{
 // creates a new user based on request body's name
 export const creatUser: RequestHandler = async(request, response, next) =>{
     const name = request.body.name;
-    console.log("request body:" + JSON.stringify(request.body));
+    // console.log("request body:" + JSON.stringify(request.body));
     if (!name) {
         return response.status(400).json({ error: 'Name is required in the request body.' });
       }
@@ -195,26 +194,6 @@ export const creatUser: RequestHandler = async(request, response, next) =>{
         next(error);
     }
 };
-
-// export const getCurrentUser: RequestHandler = async(request, response, next) =>{
-//     const userId = request.session.userId;
-//     console.log("userid: "+ {userId});
-//     try {
-//         if(!userId){
-//             return response.status(400).json({ error: 'user not found' });
-//         }
-
-//         const user = await UserModel.findById(userId).exec();
-//         if (!user) {
-//             return response.status(404).json({ error: 'User not found in the database' });
-//         }
-//         response.status(200).json(user);
-
-//     } catch (error) {
-//         console.error(error);
-//         next(error);
-//     }
-// }
 
 //adds a match to a used based on userId, include match info in the request body and userId in params
 export const updateUser: RequestHandler = async(request, response, next) =>{
@@ -239,7 +218,6 @@ export const updateUser: RequestHandler = async(request, response, next) =>{
 
         if (users) {
             response.status(200).json(users);
-            console.log(users);
         } else {
             console.log('no user within the last hour');
         }
