@@ -17,6 +17,7 @@
     display: inline-block;
     width: 450px;
     text-align: center;
+    flex-wrap: wrap;
 }
 
 #guess-input input,

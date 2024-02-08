@@ -21,6 +21,7 @@ interface GuessResult {
 export default function GameBoard() {
     const [wordToGuess, setWordToGuess] = useState<string>("");
     const [yourGuess, setYourGuess] = useState<string>("");
+    const [yourGuessError, setYourGuessError] = useState<string>("");
     const [wordToGuessError, setWordToGuessError] = useState<string>("");
     const [wordSend, setWordSend] = useState<boolean>(false);
     const [opponentWordToGuess, setOpponentWordToGuess] = useState("");
@@ -36,9 +37,9 @@ export default function GameBoard() {
 
     const socket = useContext(SocketContext);
 
-    socket.on("opponentGuessResult", (wordResult) => {
-        setOpponentGuessResults([...opponentGuessResults, wordResult]);
-    });
+    // socket.on("opponentGuessResult", (wordResult) => {
+    //     setOpponentGuessResults([...opponentGuessResults, wordResult]);
+    // });
 
     useEffect(() => {
         socket.on("guessWord", (wordToGuess) => {
@@ -46,9 +47,23 @@ export default function GameBoard() {
             setOpponentWordToGuess(wordToGuess);
         });
 
+        const handleOpponentGuessResult = (wordResult: GuessResult) => {
+            setOpponentGuessResults((currentResults) => [
+                ...currentResults,
+                wordResult,
+            ]);
+        };
+
+        socket.on("opponentGuessResult", handleOpponentGuessResult);
+
+        socket.on("end", () => {
+            setEnd(true);
+        });
+
         return () => {
-            socket.off("opponentGuessResult");
             socket.off("guessWord");
+            socket.off("opponentGuessResult");
+            socket.off("end");
         };
     }, []);
 
@@ -81,6 +96,7 @@ export default function GameBoard() {
 
     const handleYourGuessChange = (e: ChangeEvent<HTMLInputElement>) => {
         setYourGuess(e.target.value);
+        setYourGuessError("");
     };
 
     const submitYourGuess = (e: FormEvent<HTMLFormElement>) => {
@@ -92,6 +108,7 @@ export default function GameBoard() {
         //first check if the word set is valid in terms of if it is a valid word
         if (error) {
             console.log(error);
+            setYourGuessError(error.details[0].message);
             return;
         }
 
@@ -102,11 +119,12 @@ export default function GameBoard() {
             console.log("go to game result modal");
             // send the result to the server
             const userID = getCookie("userId");
-            if(userID) {
+            if (userID) {
                 updateUserByID(userID);
             }
-            
+
             // send the result to the server -> game ended signal
+            socket.emit("end");
             setEnd(true);
             return;
         }
@@ -124,12 +142,12 @@ export default function GameBoard() {
         setYourGuess("");
     };
 
-    function updateUserByID(userID: string) {     
-        const newMatch : newMatch = {
+    function updateUserByID(userID: string) {
+        const newMatch: newMatch = {
             won: true,
             turns: myGuessResults.length + 1,
             timePlayed: new Date(Date.now()),
-        }
+        };
 
         updateuser(userID, newMatch);
     }
@@ -191,6 +209,9 @@ export default function GameBoard() {
                 </form>
             </div>
             <div id="guess-input">
+                {yourGuessError && (
+                    <div style={{ color: "red" }}>{yourGuessError}</div>
+                )}
                 <form className="input-group mb-3" onSubmit={submitYourGuess}>
                     <input
                         type="text"
@@ -200,8 +221,17 @@ export default function GameBoard() {
                         id="yourGuess"
                         name="yourGuess"
                         // disabled
+                        disabled={
+                            opponentWordToGuess.length == 0 ? true : false
+                        }
                     />
-                    <button className="btn btn-primary" type="submit">
+                    <button
+                        className="btn btn-primary"
+                        type="submit"
+                        disabled={
+                            opponentWordToGuess.length == 0 ? true : false
+                        }
+                    >
                         Guess
                     </button>
                 </form>

@@ -9,9 +9,9 @@ interface Props {
 export default function LoadingModal({ loadingGame, socket }: Props) {
     socket.on("opponent-found", () => {
         console.log("opponent found");
-    });
+    }); //do we need?
 
-    const handleJoinClick = () => {};
+    const handleJoinClick = () => {}; //do we need?
 
     if (!loadingGame) return null;
 

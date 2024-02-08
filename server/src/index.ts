@@ -66,6 +66,13 @@ io.on("connection", (socket: Socket) => {
             player2.on("guessWordReady", (wordToGuess) => {
                 player2.to(roomId).emit("guessWord", wordToGuess);
             });
+
+            player1.on("end", () => {
+                player1.to(roomId).emit("end");
+            });
+            player2.on("end", () => {
+                player2.to(roomId).emit("end");
+            });
         }
     });
 
