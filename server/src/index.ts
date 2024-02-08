@@ -52,6 +52,14 @@ io.on("connection", (socket: Socket) => {
                 player2.to(roomId).emit("player-name", playerName);
             });
 
+            player1.on("myGuessResult", (myGuessResult) => {
+                player1.to(roomId).emit("opponentGuessResult", myGuessResult);
+            });
+
+            player2.on("myGuessResult", (myGuessResult) => {
+                player2.to(roomId).emit("opponentGuessResult", myGuessResult);
+            });
+
             player1.on("guessWordReady", (wordToGuess) => {
                 player1.to(roomId).emit("guessWord", wordToGuess);
             });
