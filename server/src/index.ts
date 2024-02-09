@@ -74,9 +74,17 @@ io.on("connection", (socket: Socket) => {
 
             player1.on("end", () => {
                 player1.to(roomId).emit("end");
+
+                //turning off message, player, myguessresult, guesswordready for both users?
+                player1.removeAllListeners("message");
+                player2.removeAllListeners("message");
             });
             player2.on("end", () => {
                 player2.to(roomId).emit("end");
+                player1.removeAllListeners("message");
+                player2.removeAllListeners("message");
+
+                //turning off message, player, myguessresult, guesswordready for both users?
             });
         }
     });
