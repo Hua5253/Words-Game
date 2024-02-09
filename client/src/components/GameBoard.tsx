@@ -12,8 +12,8 @@ interface Player {
     id: string | null;
 }
 interface NavigationState {
-    userName:string,
-    opponent:Player;
+    userName: string;
+    opponent: Player;
 }
 
 interface GuessResult {
@@ -54,17 +54,19 @@ export default function GameBoard() {
         });
 
         socket.on("end", () => {
-            console.log("your word is "+wordToGuess);
+            console.log("your word is " + wordToGuess);
 
             console.log(opponent.name);
-            if(opponent.name){
+            if (opponent.name) {
                 setWinner(opponent.name);
             }
-            socket.emit('update-stats');
+            // socket.emit('update-stats');
             const userID = getCookie("userId");
             if (userID) {
                 updateUserByID(userID, false);
             }
+
+            socket.emit("update-stats");
             setEnd(true);
         });
 
@@ -125,21 +127,23 @@ export default function GameBoard() {
         // guess is correct, game over
         if (yourGuess.toLowerCase() === opponentWordToGuess.toLowerCase()) {
             console.log("go to game result modal");
-            console.log("your word is "+wordToGuess);
+            console.log("your word is " + wordToGuess);
             // send the result to the server
             const userID = getCookie("userId");
-            if(userName){
+            if (userName) {
                 setWinner(userName);
             }
-            socket.emit("end");
+            // socket.emit("end");
             // //console.log(opponent.playerID);
 
             if (userID) {
                 updateUserByID(userID, true);
             }
 
+            socket.emit("end");
+
             // send the result to the server -> game ended signal
-            
+
             setEnd(true);
             return;
         }
@@ -194,7 +198,7 @@ export default function GameBoard() {
                 <div className="g-col-6">
                     <PlayerMoveRecord
                         guessResults={opponentGuessResults}
-                        name={opponent.name?opponent.name:"unknown"}
+                        name={opponent.name ? opponent.name : "unknown"}
                     />
                 </div>
             </div>
@@ -251,13 +255,14 @@ export default function GameBoard() {
                     </button>
                 </form>
             </div>
-            {end && 
-            <ResultModal 
-                winner = {winner}
-                yourWord = {wordToGuess}
-                opponentWord = {opponentWordToGuess}
-                turnNumber= {myGuessResults.length + 1}
-            />}
+            {end && (
+                <ResultModal
+                    winner={winner}
+                    yourWord={wordToGuess}
+                    opponentWord={opponentWordToGuess}
+                    turnNumber={myGuessResults.length + 1}
+                />
+            )}
         </div>
     );
 }
