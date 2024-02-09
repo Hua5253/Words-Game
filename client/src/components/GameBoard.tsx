@@ -12,7 +12,7 @@ interface Player {
     playerID: string | null;
 }
 interface NavigationState {
-    opponent:Player;
+    opponent: Player;
 }
 
 interface GuessResult {
@@ -62,6 +62,10 @@ export default function GameBoard() {
 
         socket.on("end", () => {
             setEnd(true);
+            const userID = getCookie("userId");
+            if (userID) {
+                updateUserByID(userID, false);
+            }
         });
 
         return () => {
@@ -129,7 +133,7 @@ export default function GameBoard() {
             if (userID) {
                 updateUserByID(userID, true);
             }
-            if(opponent.playerID) {
+            if (opponent.playerID) {
                 updateUserByID(opponent.playerID, false);
             }
 
