@@ -1,4 +1,4 @@
-import { FormEvent, useContext, useRef, useState } from "react";
+import { FormEvent, useContext, useEffect, useRef, useState } from "react";
 import "../CSS/ChatBox.css";
 import { SocketContext } from "./SocketContext";
 interface Message {
@@ -26,11 +26,18 @@ function ChatBox() {
         }
     };
 
-    // receive message -> use in useEffect?
-    socket.on("chat message", (data) => {
-        data.isOwnMessage = false;
-        setMessages([...messages, data]);
-    });
+    useEffect(() => {
+        const handleNewMessage = (data: Message) => {
+            data.isOwnMessage = false;
+            setMessages((prevMessages) => [...prevMessages, data]);
+        };
+        // receive message -> use in useEffect?
+        socket.on("chat message", handleNewMessage);
+
+        return () => {
+            socket.off("chat message", handleNewMessage);
+        };
+    }, []);
 
     return (
         <div>
