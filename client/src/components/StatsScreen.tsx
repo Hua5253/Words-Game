@@ -1,9 +1,11 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import "../CSS/StatsScreen.css";
 import { useNavigate } from "react-router-dom";
 import { getLastHour, getUsers, getCookie } from "./network/user-api";
+import { SocketContext } from "./SocketContext";
 
 export default function StatsScreen() {
+    const socket = useContext(SocketContext);
     const [currentTab, setCurrentTab] = useState("all");
     const navigate = useNavigate();
 
@@ -18,11 +20,9 @@ export default function StatsScreen() {
 
     useEffect(() => {
         getData();
-        const intervalId = setInterval(() => {
+        socket.on("stats", () => {
             getData();
-        }, 3000);
-
-        return () => clearInterval(intervalId);
+        });
     }, [sortBy, currentTab]);
 
     const getData = async () => {
