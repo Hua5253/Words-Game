@@ -37,9 +37,9 @@ io.on("connection", (socket: Socket) => {
             player1.join(roomId);
             player2.join(roomId);
 
-            const responst = io.to(player1.id).emit("myturn",true);
-            console.log("setting player1 to true " + responst)
-            io.to(player2.id).emit("myturn",false);
+            // const responst = io.to(player1.id).emit("myturn",true);
+            // console.log("setting player1 to true " + responst)
+            // io.to(player2.id).emit("myturn",false);
 
 
             io.to(roomId).emit("matchFound", { roomId });
