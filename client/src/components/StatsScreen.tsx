@@ -19,10 +19,15 @@ export default function StatsScreen() {
     }, []);
 
     useEffect(() => {
+        if (socket) {
+            socket.on("stats", (data) => {
+                getData();
+            });
+        }
+    }, []);
+
+    useEffect(() => {
         getData();
-        socket.on("stats", () => {
-            getData();
-        });
     }, [sortBy, currentTab]);
 
     const getData = async () => {
