@@ -31,6 +31,7 @@ export default function GameBoard() {
     const [opponentGuessResults, setOpponentGuessResults] = useState<
         GuessResult[]
     >([]);
+    const [winner, setWinner] = useState<string>("");
 
     const [end, setEnd] = useState<boolean>(false);
 
@@ -61,12 +62,16 @@ export default function GameBoard() {
         // socket.on("opponentGuessResult", handleOpponentGuessResult);
 
         socket.on("end", () => {
+            console.log(opponent.playerName);
+            if(opponent.playerName){
+                setWinner(opponent.playerName);
+            }
             socket.emit('update-stats');
-            setEnd(true);
             const userID = getCookie("userId");
             if (userID) {
                 updateUserByID(userID, false);
             }
+            setEnd(true);
         });
 
         return () => {
@@ -128,18 +133,18 @@ export default function GameBoard() {
             console.log("go to game result modal");
             // send the result to the server
             const userID = getCookie("userId");
-
-            console.log(opponent.playerID);
+            if(playerName){
+                setWinner(playerName);
+            }
+            socket.emit("end");
+            // console.log(opponent.playerID);
 
             if (userID) {
                 updateUserByID(userID, true);
             }
-            if (opponent.playerID) {
-                updateUserByID(opponent.playerID, false);
-            }
 
             // send the result to the server -> game ended signal
-            socket.emit("end");
+            
             setEnd(true);
             return;
         }
@@ -251,7 +256,13 @@ export default function GameBoard() {
                     </button>
                 </form>
             </div>
-            {end && <ResultModal />}
+            {end && 
+            <ResultModal 
+                winner = {winner}
+                yourWord = {wordToGuess}
+                opponentWord = {opponentWordToGuess}
+                turnNumber= {myGuessResults.length + 1}
+            />}
         </div>
     );
 }
