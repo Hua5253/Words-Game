@@ -61,6 +61,7 @@ export default function GameBoard() {
         // socket.on("opponentGuessResult", handleOpponentGuessResult);
 
         socket.on("end", () => {
+            socket.emit('update-stats');
             setEnd(true);
             const userID = getCookie("userId");
             if (userID) {
