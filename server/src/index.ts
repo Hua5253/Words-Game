@@ -41,7 +41,6 @@ io.on("connection", (socket: Socket) => {
             // console.log("setting player1 to true " + responst)
             // io.to(player2.id).emit("myturn",false);
 
-
             io.to(roomId).emit("matchFound", { roomId });
             player1.on("message", (data) => {
                 player1.to(roomId).emit("chat message", data);
@@ -78,11 +77,19 @@ io.on("connection", (socket: Socket) => {
                 //turning off message, player, myguessresult, guesswordready for both users?
                 player1.removeAllListeners("message");
                 player2.removeAllListeners("message");
+                player1.removeAllListeners("myGuessResult");
+                player2.removeAllListeners("myGuessResult");
+                player1.removeAllListeners("guessWordReady");
+                player2.removeAllListeners("guessWordReady");
             });
             player2.on("end", () => {
                 player2.to(roomId).emit("end");
                 player1.removeAllListeners("message");
                 player2.removeAllListeners("message");
+                player1.removeAllListeners("myGuessResult");
+                player2.removeAllListeners("myGuessResult");
+                player1.removeAllListeners("guessWordReady");
+                player2.removeAllListeners("guessWordReady");
 
                 //turning off message, player, myguessresult, guesswordready for both users?
             });

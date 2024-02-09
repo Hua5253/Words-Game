@@ -33,7 +33,7 @@ export default function GameBoard() {
         GuessResult[]
     >([]);
     const [winner, setWinner] = useState<string>("");
-    const[isMyTurn, setTurn] = useState<boolean>(true);
+    const [isMyTurn, setTurn] = useState<boolean>(true);
 
     const [end, setEnd] = useState<boolean>(false);
 
@@ -57,6 +57,12 @@ export default function GameBoard() {
         //     setTurn(turnBool);
         // });
 
+        const handleOpponentGuessResult = (data: GuessResult) => {
+            setOpponentGuessResults((prevData) => [...prevData, data]);
+        };
+
+        socket.on("opponentGuessResult", handleOpponentGuessResult);
+
         socket.on("end", () => {
             console.log(opponent.playerName);
             if (opponent.playerName) {
@@ -67,13 +73,13 @@ export default function GameBoard() {
             if (userID) {
                 updateUserByID(userID, false);
             }
-            
+
             setEnd(true);
         });
 
         return () => {
             socket.off("guessWord");
-            //socket.off("opponentGuessResult");
+            socket.off("opponentGuessResult");
             socket.off("end");
         };
     }, []);
@@ -202,11 +208,16 @@ export default function GameBoard() {
             </div>
 
             {/* Input box */}
-            { !wordSend &&
-                (<div id="token-input">
-                    <form className="input-group mb-3" onSubmit={submitWordToGuess}>
+            {!wordSend && (
+                <div id="token-input">
+                    <form
+                        className="input-group mb-3"
+                        onSubmit={submitWordToGuess}
+                    >
                         {wordToGuessError && (
-                            <div style={{ color: "red" }}>{wordToGuessError}</div>
+                            <div style={{ color: "red" }}>
+                                {wordToGuessError}
+                            </div>
                         )}
                         <input
                             type="text"
@@ -225,43 +236,41 @@ export default function GameBoard() {
                             Send to Opponent
                         </button>
                     </form>
-                </div>)
-            }
-            
-            {
-                wordSend && (
-                    <div id="guess-input">
-                        {yourGuessError && (
-                            <div style={{ color: "red" }}>{yourGuessError}</div>
-                        )}
-                        <form className="input-group mb-3" onSubmit={submitYourGuess}>
-                            <input
-                                type="text"
-                                placeholder="Enter your word"
-                                onChange={handleYourGuessChange}
-                                value={yourGuess}
-                                id="yourGuess"
-                                name="yourGuess"
-                                // disabled
-                                disabled={
-                                    opponentWordToGuess.length == 0 ? true : false
-                                    
-                                }
-                            />
-                            <button
-                                className="btn btn-primary"
-                                type="submit"
-                                disabled={
-                                    (!isMyTurn)  
-                                }
-                            >
-                                Guess
-                            </button>
-                        </form>
-                    </div>
-                )
-            }
-            
+                </div>
+            )}
+
+            {wordSend && (
+                <div id="guess-input">
+                    {yourGuessError && (
+                        <div style={{ color: "red" }}>{yourGuessError}</div>
+                    )}
+                    <form
+                        className="input-group mb-3"
+                        onSubmit={submitYourGuess}
+                    >
+                        <input
+                            type="text"
+                            placeholder="Enter your word"
+                            onChange={handleYourGuessChange}
+                            value={yourGuess}
+                            id="yourGuess"
+                            name="yourGuess"
+                            // disabled
+                            disabled={
+                                opponentWordToGuess.length == 0 ? true : false
+                            }
+                        />
+                        <button
+                            className="btn btn-primary"
+                            type="submit"
+                            disabled={!isMyTurn}
+                        >
+                            Guess
+                        </button>
+                    </form>
+                </div>
+            )}
+
             {end && (
                 <ResultModal
                     winner={winner}
