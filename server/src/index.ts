@@ -109,20 +109,20 @@ mongoose
 app.use(express.json());
 app.use(cookieParser());
 
-app.use(
-    session({
-        secret: "aw1sdwl$ak",
-        resave: false,
-        saveUninitialized: true,
-        cookie: {
-            maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days in milliseconds
-        },
-        rolling: true,
-        store: MongoStore.create({
-            mongoUrl: MongoDBURL,
-        }),
-    })
-);
+// app.use(
+//     session({
+//         secret: "aw1sdwl$ak",
+//         resave: false,
+//         saveUninitialized: true,
+//         cookie: {
+//             maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days in milliseconds
+//         },
+//         rolling: true,
+//         store: MongoStore.create({
+//             mongoUrl: MongoDBURL,
+//         }),
+//     })
+// );
 
 app.use("/api", userRouter);
 
