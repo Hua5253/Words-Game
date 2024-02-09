@@ -59,10 +59,14 @@ io.on("connection", (socket: Socket) => {
 
             player1.on("myGuessResult", (myGuessResult) => {
                 player1.to(roomId).emit("opponentGuessResult", myGuessResult);
+                player1.to(roomId).emit("myturn", true);
+
             });
 
             player2.on("myGuessResult", (myGuessResult) => {
                 player2.to(roomId).emit("opponentGuessResult", myGuessResult);
+                player2.to(roomId).emit("myturn", true);
+
             });
 
             player1.on("guessWordReady", (wordToGuess) => {

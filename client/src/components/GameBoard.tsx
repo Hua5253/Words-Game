@@ -155,6 +155,7 @@ export default function GameBoard() {
         setMyGuessResults([...myGuessResults, myGuessResult]);
 
         socket.emit("myGuessResult", myGuessResult);
+        setTurn(false);
 
         setYourGuess("");
     };
