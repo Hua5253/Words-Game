@@ -18,6 +18,11 @@ export default function StatsScreen() {
 
     useEffect(() => {
         getData();
+        const intervalId = setInterval(() => {
+            getData();
+        }, 3000);
+
+        return () => clearInterval(intervalId);
     }, [sortBy, currentTab]);
 
     const getData = async () => {
