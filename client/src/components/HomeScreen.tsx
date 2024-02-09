@@ -7,36 +7,43 @@ import { SocketContext } from "./SocketContext";
 import { getCookie } from "./network/user-api";
 import GetUser from "./GetUser";
 
+
 interface Player {
-    name: string | null;
-    id: string | null;
+    playerName: string | null;
+    playerID: string | null;
 }
+
 
 function HomeScreen() {
     const socket = useContext(SocketContext);
     const navigate = useNavigate();
     const [loadingGame, setLoadingGame] = useState(false);
     const [showCountDownModal, setShowCountDownModal] = useState(false);
-    const [opponent, setOpponent] = useState<Player>({name: "", id: ""});
+    const [opponent, setOpponent] = useState<Player>({playerName: "", playerID: ""});
+
 
     const playerName = getCookie("name");
     const userID = getCookie("userId");
     const player : Player = {
-        name: playerName,
-        id : userID
+        playerName: playerName,
+        playerID : userID
     }
 
-    socket.emit("playerName", player);
+
+    socket.emit("player", player);
+
 
     useEffect(() => {
         socket.on("matchFound", () => {
             setShowCountDownModal(true);
             setLoadingGame(false);
 
-            socket.on("player-name", (opponent) => {
-                setOpponent(opponent);
+
+            socket.on("player", (player) => {
+                setOpponent(player);
             });
         });
+
 
         return () => {
             socket.off("matchFound");
@@ -44,19 +51,23 @@ function HomeScreen() {
         };
     }, []);
 
+
     const transitToCountDown = () => {
         setLoadingGame(false);
     };
 
+
     const findingAMatch = () => {
         socket.emit("finding-a-match");
     };
+
 
     return (
         <>
             <div className="homescreen">
                 <GetUser />
                 <h1>Guessing Words Game</h1>
+
 
                 <div className="d-grid gap-2  mx-auto">
                     <button
@@ -70,6 +81,7 @@ function HomeScreen() {
                         Play
                     </button>
 
+
                     <button
                         type="button"
                         className="btn btn-primary mt-3"
@@ -80,6 +92,7 @@ function HomeScreen() {
                         View Stats
                     </button>
                 </div>
+
 
                 <LoadingModal
                     loadingGame={loadingGame}
@@ -93,7 +106,6 @@ function HomeScreen() {
                             setShowCountDownModal(false);
                             navigate("/game", {
                                 state: {
-                                    userName:playerName,
                                     opponent: opponent
                                 },
                             });
@@ -104,5 +116,6 @@ function HomeScreen() {
         </>
     );
 }
+
 
 export default HomeScreen;
