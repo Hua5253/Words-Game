@@ -2,9 +2,10 @@ import CountDownModal from "./CountDownModal";
 import { useNavigate } from "react-router-dom";
 import "../CSS/HomeScreen.css";
 import LoadingModal from "./LoadingModal";
-import GetUser, { getCookie } from "./GetUser";
 import { useContext, useEffect, useState } from "react";
 import { SocketContext } from "./SocketContext";
+import { getCookie } from "./network/user-api";
+import GetUser from "./GetUser";
 
 interface Player {
     playerName: string | null;

@@ -1,14 +1,30 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import "../CSS/StatsScreen.css";
 import { useNavigate } from "react-router-dom";
+import { getLastHour, getUsers, getCookie } from "./network/user-api";
+import { SocketContext } from "./SocketContext";
 
-function StatsScreen() {
+export default function StatsScreen() {
+    const socket = useContext(SocketContext);
     const [currentTab, setCurrentTab] = useState("all");
     const navigate = useNavigate();
 
     const [data, setData] = useState([] as any[]);
+    const [username, setUsername] = useState("");
 
     const [sortBy, setSortBy] = useState("");
+
+    useEffect(() => {
+        getUserName();
+    }, []);
+
+    useEffect(() => {
+        if (socket) {
+            socket.on("stats", (data) => {
+                getData();
+            });
+        }
+    }, []);
 
     useEffect(() => {
         getData();
@@ -18,9 +34,9 @@ function StatsScreen() {
         let tempData: any[] = [];
 
         if (currentTab == "all") {
-            tempData = await fetch("http://127.0.0.1:3000/api/users").then((res) => res.json());
+            tempData = await getUsers().then((res) => res.data);
         } else if (currentTab == "last") {
-            tempData = await fetch("http://127.0.0.1:3000/api/lasthour").then((res) => res.json());
+            tempData = await getLastHour().then((res) => res.data);
         }
 
         switch (sortBy) {
@@ -37,6 +53,11 @@ function StatsScreen() {
                 setData(tempData);
                 break;
         }
+    };
+
+    const getUserName = () => {
+        const name = getCookie("name") as string;
+        setUsername(name);
     };
 
     const handleChangeTab = (tab: string) => {
@@ -102,7 +123,7 @@ function StatsScreen() {
                         </thead>
                         <tbody>
                             {data.map((item, index) => (
-                                <tr className={`${item._id == "jack" ? "table-primary" : ""}`} key={item._id}>
+                                <tr className={`${item.name == username ? "table-primary" : ""}`} key={item._id}>
                                     <th scope="row">{index + 1}</th>
                                     <td>{item.name}</td>
                                     <td>{item.totalMatches}</td>
@@ -119,5 +140,3 @@ function StatsScreen() {
         </>
     );
 }
-
-export default StatsScreen;

@@ -7,17 +7,6 @@ export const getUsers: RequestHandler = async(request, response, next) =>{
 		const users = await UserModel.aggregate([
             {
                 $addFields:{
-                    wonMatches:{
-                        $filter:{
-                            input: '$matches',
-                            as: 'match',
-                            cond: { 
-                                $and:[
-                                    {$eq: ['$$match.won', true]},
-                                ]
-                            },
-                        },                       
-                    },
                     matchesWon:{
                         $size:{
                             $filter:{
@@ -28,6 +17,17 @@ export const getUsers: RequestHandler = async(request, response, next) =>{
                         },
                     },
                     totalMatches: {$size: '$matches'},
+                },  
+            },
+            {
+                $match: {
+                    matches: {
+                        $elemMatch: { won: true }
+                    }
+                }
+            },
+            {
+                $addFields:{
                     avgTurns: {$avg: '$matches.turns'},
                 },  
             },
@@ -105,25 +105,6 @@ export const getLastHour: RequestHandler = async(request, response, next) =>{
             },
             {
                 $addFields:{
-                    latestMatches: {
-                        $filter: {
-                            input: '$matches',
-                            as: 'match',
-                            cond: { $gte: ['$$match.timePlayed', oneHourAgo] },
-                        },
-                    },
-                    wonMatches:{
-                        $filter:{
-                            input: '$matches',
-                            as: 'match',
-                            cond: { 
-                                $and:[
-                                    {$gte: ['$$match.timePlayed', oneHourAgo] },
-                                    {$eq: ['$$match.won', true]},
-                                ]
-                            },
-                        },                       
-                    },
                     matchesWon:{
                         $size:{
                             $filter:{
@@ -147,13 +128,23 @@ export const getLastHour: RequestHandler = async(request, response, next) =>{
                             },
                         },
                     },
+                },  
+            },
+            {
+                $match: {
+                    matches: {
+                        $elemMatch: { won: true }
+                    }
+                }
+            },
+            {
+                $addFields:{
                     avgTurns: {$avg: '$matches.turns'},
                 },  
             },
             {
                 $project:{
                     name:1,
-                    latestMatches:1,
                     matchesWon:1,
                     totalMatches:1,
                     avgTurns:1,

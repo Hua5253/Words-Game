@@ -3,8 +3,7 @@ import PlayerMoveRecord from "./PlayerMoveRecord";
 import { wordToGuessSchema, yourGuessScheme } from "../data/validate";
 import { SocketContext } from "./SocketContext";
 import { useLocation } from "react-router-dom";
-import { getUserByName, updateuser } from "./network/user-api";
-import { getCookie } from "./GetUser";
+import { getCookie, getUserByName, updateuser } from "./network/user-api";
 import { newMatch } from "./network/user-api";
 import ResultModal from "./ResultModel";
 

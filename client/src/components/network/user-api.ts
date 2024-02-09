@@ -46,6 +46,18 @@ export const getUserByName = (findName: string) => {
     });
 }
 
+// Function to get the value of a cookie
+export function getCookie(name: String) {
+    const cookies = document.cookie.split("; ");
+    for (const cookie of cookies) {
+        const [cookieName, cookieValue] = cookie.split("=");
+        if (cookieName === name) {
+            return cookieValue;
+        }
+    }
+    return null;
+}
+
 
 const apis ={
     getUsers,
@@ -54,5 +66,7 @@ const apis ={
     creatUser,
     updateuser,
     getUser,
+    getCookie,
+    
 }
 export default apis
