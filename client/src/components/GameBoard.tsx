@@ -68,11 +68,19 @@ export default function GameBoard() {
 
             socket.emit("update-stats");
             setEnd(true);
+            const UserId = getCookie("userId");
+            if (UserId) {
+                updateUserByID(UserId, false);
+            }
         });
+
+        // socket.on("opponentGuessResult", (wordResult) => {
+        //     setOpponentGuessResults([...opponentGuessResults, wordResult]);
+        // });
 
         return () => {
             socket.off("guessWord");
-            //socket.off("opponentGuessResult");
+            socket.off("opponentGuessResult");
             socket.off("end");
         };
     }, []);
