@@ -33,7 +33,7 @@ export default function GameBoard() {
         GuessResult[]
     >([]);
     const [winner, setWinner] = useState<string>("");
-    const[isMyTurn, setTurn] = useState<boolean>(true);
+    const[isMyTurn, setTurn] = useState<boolean>(false);
 
     const [end, setEnd] = useState<boolean>(false);
 
@@ -52,10 +52,10 @@ export default function GameBoard() {
             setOpponentWordToGuess(wordToGuess);
         });
 
-        // socket.on("myturn", (turnBool) =>{
-        //     console.log("setting my turn to " + turnBool);
-        //     setTurn(turnBool);
-        // });
+        socket.on("myturn", (turnBool) =>{
+            console.log("setting my turn to " + turnBool);
+            setTurn(turnBool);
+        });
 
         socket.on("end", () => {
             console.log(opponent.playerName);
@@ -244,8 +244,7 @@ export default function GameBoard() {
                                 name="yourGuess"
                                 // disabled
                                 disabled={
-                                    opponentWordToGuess.length == 0 ? true : false
-                                    
+                                    !isMyTurn || (opponentWordToGuess.length == 0 ? true : false)  
                                 }
                             />
                             <button
