@@ -33,6 +33,7 @@ export default function GameBoard() {
         GuessResult[]
     >([]);
     const [winner, setWinner] = useState<string>("");
+    const[isMyTurn, setTurn] = useState<boolean>(false);
 
     const [end, setEnd] = useState<boolean>(false);
 
@@ -53,14 +54,10 @@ export default function GameBoard() {
             setOpponentWordToGuess(wordToGuess);
         });
 
-        // const handleOpponentGuessResult = (wordResult: GuessResult) => {
-        //     setOpponentGuessResults((currentResults) => [
-        //         ...currentResults,
-        //         wordResult,
-        //     ]);
-        // };
-
-        // socket.on("opponentGuessResult", handleOpponentGuessResult);
+        socket.on("myturn", (turnBool) =>{
+            console.log("setting my turn to " + turnBool);
+            setTurn(turnBool);
+        });
 
         socket.on("end", () => {
             console.log(opponent.playerName);
@@ -72,6 +69,7 @@ export default function GameBoard() {
             if (userID) {
                 updateUserByID(userID, false);
             }
+            
             setEnd(true);
         });
 
@@ -206,57 +204,66 @@ export default function GameBoard() {
             </div>
 
             {/* Input box */}
-            <div id="token-input">
-                <form className="input-group mb-3" onSubmit={submitWordToGuess}>
-                    {wordToGuessError && (
-                        <div style={{ color: "red" }}>{wordToGuessError}</div>
-                    )}
-                    <input
-                        type="text"
-                        placeholder="Word for your opponent to guess"
-                        onChange={handleWordToGuessChange}
-                        value={wordToGuess}
-                        id="wordToGuess"
-                        name="wordToGuess"
-                        disabled={wordSend ? true : false}
-                    />
-                    <button
-                        className="btn btn-primary"
-                        type="submit"
-                        disabled={wordSend ? true : false}
-                    >
-                        Send to Opponent
-                    </button>
-                </form>
-            </div>
-            <div id="guess-input">
-                {yourGuessError && (
-                    <div style={{ color: "red" }}>{yourGuessError}</div>
-                )}
-                <form className="input-group mb-3" onSubmit={submitYourGuess}>
-                    <input
-                        type="text"
-                        placeholder="Enter your word"
-                        onChange={handleYourGuessChange}
-                        value={yourGuess}
-                        id="yourGuess"
-                        name="yourGuess"
-                        // disabled
-                        disabled={
-                            opponentWordToGuess.length == 0 ? true : false
-                        }
-                    />
-                    <button
-                        className="btn btn-primary"
-                        type="submit"
-                        disabled={
-                            opponentWordToGuess.length == 0 ? true : false
-                        }
-                    >
-                        Guess
-                    </button>
-                </form>
-            </div>
+            { !wordSend &&
+                (<div id="token-input">
+                    <form className="input-group mb-3" onSubmit={submitWordToGuess}>
+                        {wordToGuessError && (
+                            <div style={{ color: "red" }}>{wordToGuessError}</div>
+                        )}
+                        <input
+                            type="text"
+                            placeholder="Word for your opponent to guess"
+                            onChange={handleWordToGuessChange}
+                            value={wordToGuess}
+                            id="wordToGuess"
+                            name="wordToGuess"
+                            disabled={wordSend ? true : false}
+                        />
+                        <button
+                            className="btn btn-primary"
+                            type="submit"
+                            disabled={wordSend ? true : false}
+                        >
+                            Send to Opponent
+                        </button>
+                    </form>
+                </div>)
+            }
+            
+            {
+                wordSend && (
+                    <div id="guess-input">
+                        {yourGuessError && (
+                            <div style={{ color: "red" }}>{yourGuessError}</div>
+                        )}
+                        <form className="input-group mb-3" onSubmit={submitYourGuess}>
+                            <input
+                                type="text"
+                                placeholder="Enter your word"
+                                onChange={handleYourGuessChange}
+                                value={yourGuess}
+                                id="yourGuess"
+                                name="yourGuess"
+                                // disabled
+                                disabled={
+                                    opponentWordToGuess.length == 0 ? true : false
+                                    
+                                }
+                            />
+                            <button
+                                className="btn btn-primary"
+                                type="submit"
+                                disabled={
+                                    (!isMyTurn)  
+                                }
+                            >
+                                Guess
+                            </button>
+                        </form>
+                    </div>
+                )
+            }
+            
             {end && (
                 <ResultModal
                     winner={winner}
