@@ -105,7 +105,7 @@ export default function GameBoard() {
             socket.emit("guessWordReady", wordToGuess);
         }
 
-        setWordToGuess("");
+        // setWordToGuess("");
     };
 
     const handleYourGuessChange = (e: ChangeEvent<HTMLInputElement>) => {
