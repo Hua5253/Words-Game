@@ -8,8 +8,8 @@ import { getCookie } from "./network/user-api";
 import GetUser from "./GetUser";
 
 interface Player {
-    playerName: string | null;
-    playerID: string | null;
+    name: string | null;
+    id: string | null;
 }
 
 function HomeScreen() {
@@ -17,24 +17,24 @@ function HomeScreen() {
     const navigate = useNavigate();
     const [loadingGame, setLoadingGame] = useState(false);
     const [showCountDownModal, setShowCountDownModal] = useState(false);
-    const [opponent, setOpponent] = useState<Player>({playerName: "", playerID: ""});
+    const [opponent, setOpponent] = useState<Player>({name: "", id: ""});
 
     const playerName = getCookie("name");
     const userID = getCookie("userId");
     const player : Player = {
-        playerName: playerName,
-        playerID : userID
+        name: playerName,
+        id : userID
     }
 
-    socket.emit("player", player);
+    socket.emit("playerName", player);
 
     useEffect(() => {
         socket.on("matchFound", () => {
             setShowCountDownModal(true);
             setLoadingGame(false);
 
-            socket.on("player", (player) => {
-                setOpponent(player);
+            socket.on("player-name", (opponent) => {
+                setOpponent(opponent);
             });
         });
 
@@ -93,6 +93,7 @@ function HomeScreen() {
                             setShowCountDownModal(false);
                             navigate("/game", {
                                 state: {
+                                    userName:playerName,
                                     opponent: opponent
                                 },
                             });
