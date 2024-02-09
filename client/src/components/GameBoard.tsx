@@ -33,7 +33,7 @@ export default function GameBoard() {
         GuessResult[]
     >([]);
     const [winner, setWinner] = useState<string>("");
-    const [isMyTurn, setTurn] = useState<boolean>(true);
+    const[isMyTurn, setTurn] = useState<boolean>(false);
 
     const [end, setEnd] = useState<boolean>(false);
 
@@ -52,10 +52,10 @@ export default function GameBoard() {
             setOpponentWordToGuess(wordToGuess);
         });
 
-        // socket.on("myturn", (turnBool) =>{
-        //     console.log("setting my turn to " + turnBool);
-        //     setTurn(turnBool);
-        // });
+        socket.on("myturn", (turnBool) =>{
+            console.log("setting my turn to " + turnBool);
+            setTurn(turnBool);
+        });
 
         const handleOpponentGuessResult = (data: GuessResult) => {
             setOpponentGuessResults((prevData) => [...prevData, data]);
@@ -161,6 +161,7 @@ export default function GameBoard() {
         setMyGuessResults([...myGuessResults, myGuessResult]);
 
         socket.emit("myGuessResult", myGuessResult);
+        setTurn(false);
 
         setYourGuess("");
     };
@@ -236,41 +237,42 @@ export default function GameBoard() {
                             Send to Opponent
                         </button>
                     </form>
-                </div>
-            )}
-
-            {wordSend && (
-                <div id="guess-input">
-                    {yourGuessError && (
-                        <div style={{ color: "red" }}>{yourGuessError}</div>
-                    )}
-                    <form
-                        className="input-group mb-3"
-                        onSubmit={submitYourGuess}
-                    >
-                        <input
-                            type="text"
-                            placeholder="Enter your word"
-                            onChange={handleYourGuessChange}
-                            value={yourGuess}
-                            id="yourGuess"
-                            name="yourGuess"
-                            // disabled
-                            disabled={
-                                opponentWordToGuess.length == 0 ? true : false
-                            }
-                        />
-                        <button
-                            className="btn btn-primary"
-                            type="submit"
-                            disabled={!isMyTurn}
-                        >
-                            Guess
-                        </button>
-                    </form>
-                </div>
-            )}
-
+                </div>)
+            }
+            
+            {
+                wordSend && (
+                    <div id="guess-input">
+                        {yourGuessError && (
+                            <div style={{ color: "red" }}>{yourGuessError}</div>
+                        )}
+                        <form className="input-group mb-3" onSubmit={submitYourGuess}>
+                            <input
+                                type="text"
+                                placeholder="Enter your word"
+                                onChange={handleYourGuessChange}
+                                value={yourGuess}
+                                id="yourGuess"
+                                name="yourGuess"
+                                // disabled
+                                disabled={
+                                    !isMyTurn || (opponentWordToGuess.length == 0 ? true : false)  
+                                }
+                            />
+                            <button
+                                className="btn btn-primary"
+                                type="submit"
+                                disabled={
+                                    (!isMyTurn)  
+                                }
+                            >
+                                Guess
+                            </button>
+                        </form>
+                    </div>
+                )
+            }
+            
             {end && (
                 <ResultModal
                     winner={winner}
