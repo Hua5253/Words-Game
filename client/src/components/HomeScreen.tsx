@@ -14,12 +14,12 @@ function HomeScreen() {
     const [opponentName, setOpponentName] = useState("opponent");
 
     const playerName = getCookie("name");
+
+    socket.emit("playerName", playerName);
     useEffect(() => {
         socket.on("matchFound", () => {
             setShowCountDownModal(true);
             setLoadingGame(false);
-
-            socket.emit("playerName", playerName);
 
             socket.on("player-name", (playerName) => {
                 setOpponentName(playerName);
