@@ -3,16 +3,17 @@ import PlayerMoveRecord from "./PlayerMoveRecord";
 import { wordToGuessSchema, yourGuessScheme } from "../data/validate";
 import { SocketContext } from "./SocketContext";
 import { useLocation } from "react-router-dom";
-import { getCookie, getUserByName, updateuser } from "./network/user-api";
+import { getCookie, updateuser } from "./network/user-api";
 import { newMatch } from "./network/user-api";
 import ResultModal from "./ResultModel";
 
 interface Player {
-    playerName: string | null;
-    playerID: string | null;
+    name: string | null;
+    id: string | null;
 }
 interface NavigationState {
-    opponent: Player;
+    userName:string,
+    opponent:Player;
 }
 
 interface GuessResult {
@@ -36,11 +37,11 @@ export default function GameBoard() {
     const [end, setEnd] = useState<boolean>(false);
 
     const location = useLocation();
-    const { opponent }: NavigationState = location.state || {}; // Destructure the passed state
+    const { userName, opponent }: NavigationState = location.state || {}; // Destructure the passed state
 
     const socket = useContext(SocketContext);
 
-    const playerName = getCookie("name");
+    // const playerName = getCookie("name");
 
     socket.on("opponentGuessResult", (wordResult) => {
         setOpponentGuessResults([...opponentGuessResults, wordResult]);
@@ -51,15 +52,6 @@ export default function GameBoard() {
             console.log(wordToGuess);
             setOpponentWordToGuess(wordToGuess);
         });
-
-        // const handleOpponentGuessResult = (wordResult: GuessResult) => {
-        //     setOpponentGuessResults((currentResults) => [
-        //         ...currentResults,
-        //         wordResult,
-        //     ]);
-        // };
-
-        // socket.on("opponentGuessResult", handleOpponentGuessResult);
 
         socket.on("end", () => {
             console.log("your word is "+wordToGuess);
@@ -140,7 +132,7 @@ export default function GameBoard() {
                 setWinner(playerName);
             }
             socket.emit("end");
-            // console.log(opponent.playerID);
+            // //console.log(opponent.playerID);
 
             if (userID) {
                 updateUserByID(userID, true);
@@ -196,13 +188,13 @@ export default function GameBoard() {
                 <div className="pe-2 g-col-6">
                     <PlayerMoveRecord
                         guessResults={myGuessResults}
-                        name={playerName}
+                        name={userName}
                     />
                 </div>
                 <div className="g-col-6">
                     <PlayerMoveRecord
                         guessResults={opponentGuessResults}
-                        name={opponent.playerName}
+                        name={opponent.name?opponent.name:"unknown"}
                     />
                 </div>
             </div>
