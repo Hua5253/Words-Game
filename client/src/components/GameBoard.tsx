@@ -56,9 +56,9 @@ export default function GameBoard() {
         socket.on("end", () => {
             console.log("your word is "+wordToGuess);
 
-            console.log(opponent.playerName);
-            if(opponent.playerName){
-                setWinner(opponent.playerName);
+            console.log(opponent.name);
+            if(opponent.name){
+                setWinner(opponent.name);
             }
             socket.emit('update-stats');
             const userID = getCookie("userId");
@@ -128,8 +128,8 @@ export default function GameBoard() {
             console.log("your word is "+wordToGuess);
             // send the result to the server
             const userID = getCookie("userId");
-            if(playerName){
-                setWinner(playerName);
+            if(userName){
+                setWinner(userName);
             }
             socket.emit("end");
             // //console.log(opponent.playerID);
