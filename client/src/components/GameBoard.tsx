@@ -8,9 +8,14 @@ import { getCookie } from "./GetUser";
 import { newMatch } from "./network/user-api";
 import ResultModal from "./ResultModel";
 
+interface Player {
+    name: string | null;
+    id: string | null;
+}
+
 interface NavigationState {
     userName: string;
-    opponentName: string;
+    opponent: Player;
 }
 
 interface GuessResult {
@@ -33,7 +38,7 @@ export default function GameBoard() {
     const [end, setEnd] = useState<boolean>(false);
 
     const location = useLocation();
-    const { userName, opponentName }: NavigationState = location.state || {}; // Destructure the passed state
+    const { userName, opponent }: NavigationState = location.state || {}; // Destructure the passed state
 
     const socket = useContext(SocketContext);
 
@@ -47,17 +52,12 @@ export default function GameBoard() {
             setOpponentWordToGuess(wordToGuess);
         });
 
-        // const handleOpponentGuessResult = (wordResult: GuessResult) => {
-        //     setOpponentGuessResults((currentResults) => [
-        //         ...currentResults,
-        //         wordResult,
-        //     ]);
-        // };
-
-        // socket.on("opponentGuessResult", handleOpponentGuessResult);
-
         socket.on("end", () => {
             setEnd(true);
+            const userID = getCookie("userId");
+            if (userID) {
+                updateUserByID(userID, false);
+            }
         });
 
         return () => {
@@ -120,7 +120,7 @@ export default function GameBoard() {
             // send the result to the server
             const userID = getCookie("userId");
             if (userID) {
-                updateUserByID(userID);
+                updateUserByID(userID, true);
             }
 
             // send the result to the server -> game ended signal
@@ -142,9 +142,9 @@ export default function GameBoard() {
         setYourGuess("");
     };
 
-    function updateUserByID(userID: string) {
+    function updateUserByID(userID: string, win: boolean) {
         const newMatch: newMatch = {
-            won: true,
+            won: win,
             turns: myGuessResults.length + 1,
             timePlayed: new Date(Date.now()),
         };
@@ -179,7 +179,7 @@ export default function GameBoard() {
                 <div className="g-col-6">
                     <PlayerMoveRecord
                         guessResults={opponentGuessResults}
-                        name={opponentName}
+                        name={opponent.name ? opponent.name : "unknown"}
                     />
                 </div>
             </div>

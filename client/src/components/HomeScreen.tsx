@@ -6,23 +6,34 @@ import GetUser, { getCookie } from "./GetUser";
 import { useContext, useEffect, useState } from "react";
 import { SocketContext } from "./SocketContext";
 
+interface Player {
+    name: string | null;
+    id: string | null;
+}
+
 function HomeScreen() {
     const socket = useContext(SocketContext);
     const navigate = useNavigate();
     const [loadingGame, setLoadingGame] = useState(false);
     const [showCountDownModal, setShowCountDownModal] = useState(false);
-    const [opponentName, setOpponentName] = useState("opponent");
+    const [opponent, setOpponent] = useState<Player>({
+        name: "",
+        id: "",
+    });
 
     const playerName = getCookie("name");
+    const id = getCookie("id");
 
-    socket.emit("playerName", playerName);
+    const player: Player = { name: playerName, id: id };
+
+    socket.emit("playerName", player);
     useEffect(() => {
         socket.on("matchFound", () => {
             setShowCountDownModal(true);
             setLoadingGame(false);
 
-            socket.on("player-name", (playerName) => {
-                setOpponentName(playerName);
+            socket.on("player-name", (opponent) => {
+                setOpponent(opponent);
             });
         });
 
@@ -82,7 +93,7 @@ function HomeScreen() {
                             navigate("/game", {
                                 state: {
                                     userName: playerName,
-                                    opponentName: opponentName,
+                                    opponent: opponent,
                                 },
                             });
                         }}
