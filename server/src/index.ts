@@ -77,8 +77,8 @@ io.on("connection", (socket: Socket) => {
     });
 
     //when game finish, front-end emit this event
-    socket.on('update-stats', (data) => {
-        io.emit('stats', data);
+    socket.on('update-stats', () => {
+        io.emit('stats');
         });
 
     socket.on("disconnect", () => {

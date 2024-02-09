@@ -20,7 +20,7 @@ export default function StatsScreen() {
 
     useEffect(() => {
         if (socket) {
-            socket.on("stats", (data) => {
+            socket.on("stats", () => {
                 getData();
             });
         }

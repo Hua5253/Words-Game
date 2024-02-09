@@ -53,6 +53,7 @@ export default function GameBoard() {
         });
 
         socket.on("end", () => {
+            socket.emit('update-stats');
             setEnd(true);
             const UserId = getCookie("userId");
             if(UserId){
