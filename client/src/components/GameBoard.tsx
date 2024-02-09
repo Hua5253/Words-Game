@@ -37,9 +37,9 @@ export default function GameBoard() {
 
     const socket = useContext(SocketContext);
 
-    // socket.on("opponentGuessResult", (wordResult) => {
-    //     setOpponentGuessResults([...opponentGuessResults, wordResult]);
-    // });
+    socket.on("opponentGuessResult", (wordResult) => {
+        setOpponentGuessResults([...opponentGuessResults, wordResult]);
+    });
 
     useEffect(() => {
         socket.on("guessWord", (wordToGuess) => {
@@ -47,14 +47,14 @@ export default function GameBoard() {
             setOpponentWordToGuess(wordToGuess);
         });
 
-        const handleOpponentGuessResult = (wordResult: GuessResult) => {
-            setOpponentGuessResults((currentResults) => [
-                ...currentResults,
-                wordResult,
-            ]);
-        };
+        // const handleOpponentGuessResult = (wordResult: GuessResult) => {
+        //     setOpponentGuessResults((currentResults) => [
+        //         ...currentResults,
+        //         wordResult,
+        //     ]);
+        // };
 
-        socket.on("opponentGuessResult", handleOpponentGuessResult);
+        // socket.on("opponentGuessResult", handleOpponentGuessResult);
 
         socket.on("end", () => {
             setEnd(true);
@@ -62,7 +62,7 @@ export default function GameBoard() {
 
         return () => {
             socket.off("guessWord");
-            socket.off("opponentGuessResult");
+            //socket.off("opponentGuessResult");
             socket.off("end");
         };
     }, []);
