@@ -12,6 +12,7 @@ interface Player {
     playerID: string | null;
 }
 interface NavigationState {
+    username: string;
     opponent: Player;
 }
 
@@ -36,11 +37,11 @@ export default function GameBoard() {
     const [end, setEnd] = useState<boolean>(false);
 
     const location = useLocation();
-    const { opponent }: NavigationState = location.state || {}; // Destructure the passed state
+    const { username, opponent }: NavigationState = location.state || {}; // Destructure the passed state
 
     const socket = useContext(SocketContext);
 
-    const playerName = getCookie("name");
+    // const playerName = getCookie("name");
 
     socket.on("opponentGuessResult", (wordResult) => {
         setOpponentGuessResults([...opponentGuessResults, wordResult]);
@@ -63,10 +64,10 @@ export default function GameBoard() {
 
         socket.on("end", () => {
             console.log(opponent.playerName);
-            if(opponent.playerName){
+            if (opponent.playerName) {
                 setWinner(opponent.playerName);
             }
-            socket.emit('update-stats');
+            socket.emit("update-stats");
             const userID = getCookie("userId");
             if (userID) {
                 updateUserByID(userID, false);
@@ -133,8 +134,8 @@ export default function GameBoard() {
             console.log("go to game result modal");
             // send the result to the server
             const userID = getCookie("userId");
-            if(playerName){
-                setWinner(playerName);
+            if (username) {
+                setWinner(username);
             }
             socket.emit("end");
             // console.log(opponent.playerID);
@@ -144,7 +145,7 @@ export default function GameBoard() {
             }
 
             // send the result to the server -> game ended signal
-            
+
             setEnd(true);
             return;
         }
@@ -193,7 +194,7 @@ export default function GameBoard() {
                 <div className="pe-2 g-col-6">
                     <PlayerMoveRecord
                         guessResults={myGuessResults}
-                        name={playerName}
+                        name={username}
                     />
                 </div>
                 <div className="g-col-6">
@@ -256,13 +257,14 @@ export default function GameBoard() {
                     </button>
                 </form>
             </div>
-            {end && 
-            <ResultModal 
-                winner = {winner}
-                yourWord = {wordToGuess}
-                opponentWord = {opponentWordToGuess}
-                turnNumber= {myGuessResults.length + 1}
-            />}
+            {end && (
+                <ResultModal
+                    winner={winner}
+                    yourWord={wordToGuess}
+                    opponentWord={opponentWordToGuess}
+                    turnNumber={myGuessResults.length + 1}
+                />
+            )}
         </div>
     );
 }

@@ -8,7 +8,6 @@ import session from "express-session";
 import cookieParser from "cookie-parser";
 import MongoStore from "connect-mongo";
 
-
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
@@ -17,34 +16,26 @@ const io = new Server(server, {
     },
 });
 
-
 app.use(cors()); // Enable CORS for all routes
-
 
 interface Player extends Socket {}
 
-
 let waitingPlayers: Player[] = [];
-
 
 io.on("connection", (socket: Socket) => {
     // console.log('A user connected:', socket.id);
-
 
     socket.on("finding-a-match", () => {
         // console.log('Player looking for match:', socket.id);
         waitingPlayers.push(socket as Player);
 
-
         if (waitingPlayers.length >= 2) {
             const player1 = waitingPlayers.shift()!;
             const player2 = waitingPlayers.shift()!;
 
-
             const roomId = player1.id + "#" + player2.id;
             player1.join(roomId);
             player2.join(roomId);
-
 
             io.to(roomId).emit("matchFound", { roomId });
             player1.on("message", (data) => {
@@ -54,24 +45,20 @@ io.on("connection", (socket: Socket) => {
                 player2.to(roomId).emit("chat message", data);
             });
 
-
             player1.on("player", (player) => {
-                player1.to(roomId).emit("player-name", player);
+                player1.to(roomId).emit("player", player);
             });
             player2.on("player", (player) => {
                 player2.to(roomId).emit("player", player);
             });
 
-
             player1.on("myGuessResult", (myGuessResult) => {
                 player1.to(roomId).emit("opponentGuessResult", myGuessResult);
             });
 
-
             player2.on("myGuessResult", (myGuessResult) => {
                 player2.to(roomId).emit("opponentGuessResult", myGuessResult);
             });
-
 
             player1.on("guessWordReady", (wordToGuess) => {
                 player1.to(roomId).emit("guessWord", wordToGuess);
@@ -79,7 +66,6 @@ io.on("connection", (socket: Socket) => {
             player2.on("guessWordReady", (wordToGuess) => {
                 player2.to(roomId).emit("guessWord", wordToGuess);
             });
-
 
             player1.on("end", () => {
                 player1.to(roomId).emit("end");
@@ -90,12 +76,10 @@ io.on("connection", (socket: Socket) => {
         }
     });
 
-
     //when game finish, front-end emit this event
-    socket.on('update-stats', () => {
-        io.emit('stats');
-        });
-
+    socket.on("update-stats", () => {
+        io.emit("stats");
+    });
 
     socket.on("disconnect", () => {
         waitingPlayers = waitingPlayers.filter(
@@ -105,14 +89,11 @@ io.on("connection", (socket: Socket) => {
     });
 });
 
-
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
-
 export const DATAPORT = 8000;
 const MongoDBURL = "mongodb://localhost:27017/word-game";
-
 
 mongoose
     .connect(MongoDBURL)
@@ -125,10 +106,8 @@ mongoose
         console.error(err);
     });
 
-
 app.use(express.json());
 app.use(cookieParser());
-
 
 app.use(
     session({
@@ -145,9 +124,7 @@ app.use(
     })
 );
 
-
 app.use("/api", userRouter);
-
 
 app.use(
     (
@@ -162,5 +139,3 @@ app.use(
         response.status(500).json({ error: errorMessage });
     }
 );
-
-
