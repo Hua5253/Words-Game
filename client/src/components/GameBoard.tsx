@@ -62,6 +62,8 @@ export default function GameBoard() {
         // socket.on("opponentGuessResult", handleOpponentGuessResult);
 
         socket.on("end", () => {
+            console.log("your word is "+wordToGuess);
+
             console.log(opponent.playerName);
             if(opponent.playerName){
                 setWinner(opponent.playerName);
@@ -105,7 +107,7 @@ export default function GameBoard() {
             socket.emit("guessWordReady", wordToGuess);
         }
 
-        setWordToGuess("");
+        // setWordToGuess("");
     };
 
     const handleYourGuessChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -131,6 +133,7 @@ export default function GameBoard() {
         // guess is correct, game over
         if (yourGuess.toLowerCase() === opponentWordToGuess.toLowerCase()) {
             console.log("go to game result modal");
+            console.log("your word is "+wordToGuess);
             // send the result to the server
             const userID = getCookie("userId");
             if(playerName){

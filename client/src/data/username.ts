@@ -55,7 +55,7 @@ const animals = [
     "Umbrellabird",
     "Vulture",
     "Walrus",
-    "X-ray Tetra",
+    "Tetra",
     "Yak",
     "Zebra",
     "Armadillo",
