@@ -8,9 +8,12 @@ import { getCookie } from "./GetUser";
 import { newMatch } from "./network/user-api";
 import ResultModal from "./ResultModel";
 
+interface Player {
+    playerName: string | null;
+    playerID: string | null;
+}
 interface NavigationState {
-    userName: string;
-    opponentName: string;
+    opponent:Player;
 }
 
 interface GuessResult {
@@ -33,9 +36,11 @@ export default function GameBoard() {
     const [end, setEnd] = useState<boolean>(false);
 
     const location = useLocation();
-    const { userName, opponentName }: NavigationState = location.state || {}; // Destructure the passed state
+    const { opponent }: NavigationState = location.state || {}; // Destructure the passed state
 
     const socket = useContext(SocketContext);
+
+    const playerName = getCookie("name");
 
     socket.on("opponentGuessResult", (wordResult) => {
         setOpponentGuessResults([...opponentGuessResults, wordResult]);
@@ -114,13 +119,19 @@ export default function GameBoard() {
 
         console.log("your guess: ", yourGuess);
 
-        // guess is correct
+        // guess is correct, game over
         if (yourGuess.toLowerCase() === opponentWordToGuess.toLowerCase()) {
             console.log("go to game result modal");
             // send the result to the server
             const userID = getCookie("userId");
+
+            console.log(opponent.playerID);
+
             if (userID) {
-                updateUserByID(userID);
+                updateUserByID(userID, true);
+            }
+            if(opponent.playerID) {
+                updateUserByID(opponent.playerID, false);
             }
 
             // send the result to the server -> game ended signal
@@ -142,9 +153,9 @@ export default function GameBoard() {
         setYourGuess("");
     };
 
-    function updateUserByID(userID: string) {
+    function updateUserByID(userID: string, win: boolean) {
         const newMatch: newMatch = {
-            won: true,
+            won: win,
             turns: myGuessResults.length + 1,
             timePlayed: new Date(Date.now()),
         };
@@ -173,13 +184,13 @@ export default function GameBoard() {
                 <div className="pe-2 g-col-6">
                     <PlayerMoveRecord
                         guessResults={myGuessResults}
-                        name={userName}
+                        name={playerName}
                     />
                 </div>
                 <div className="g-col-6">
                     <PlayerMoveRecord
                         guessResults={opponentGuessResults}
-                        name={opponentName}
+                        name={opponent.playerName}
                     />
                 </div>
             </div>

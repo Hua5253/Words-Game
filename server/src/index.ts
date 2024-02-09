@@ -45,11 +45,11 @@ io.on("connection", (socket: Socket) => {
                 player2.to(roomId).emit("chat message", data);
             });
 
-            player1.on("playerName", (playerName) => {
-                player1.to(roomId).emit("player-name", playerName);
+            player1.on("player", (player) => {
+                player1.to(roomId).emit("player-name", player);
             });
-            player2.on("playerName", (playerName) => {
-                player2.to(roomId).emit("player-name", playerName);
+            player2.on("player", (player) => {
+                player2.to(roomId).emit("player", player);
             });
 
             player1.on("myGuessResult", (myGuessResult) => {

@@ -4,7 +4,7 @@ interface GuessResult {
 }
 interface Props {
     guessResults: GuessResult[];
-    name: string;
+    name: string | null;
 }
 
 export default function PlayerMoveRecord({guessResults, name} : Props) {
