@@ -62,17 +62,19 @@ function ChatBox() {
                     id="message-form"
                     onSubmit={handleSubmit}
                 >
-                    <input
-                        ref={messageRef}
-                        type="text"
-                        name="message"
-                        id="message-input"
-                        className="message-input"
-                    />
-                    <div className="v-divider"></div>
-                    <button type="submit" className="send-button">
-                        send
-                    </button>
+                    <div className="container">
+                        <input
+                            ref={messageRef}
+                            type="text"
+                            name="message"
+                            id="message-input"
+                            className="message-input"
+                        />
+                        <div className="v-divider"></div>
+                        <button type="submit" className="send-button">
+                            send
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>
