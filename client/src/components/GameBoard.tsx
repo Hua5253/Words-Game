@@ -42,9 +42,9 @@ export default function GameBoard() {
 
     const socket = useContext(SocketContext);
 
-    socket.on("opponentGuessResult", (wordResult) => {
-        setOpponentGuessResults([...opponentGuessResults, wordResult]);
-    });
+    // socket.on("opponentGuessResult", (wordResult) => {
+    //     setOpponentGuessResults([...opponentGuessResults, wordResult]);
+    // });
 
     useEffect(() => {
         socket.on("guessWord", (wordToGuess) => {

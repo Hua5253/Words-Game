@@ -85,6 +85,8 @@ io.on("connection", (socket: Socket) => {
                 player2.removeAllListeners("myGuessResult");
                 player1.removeAllListeners("guessWordReady");
                 player2.removeAllListeners("guessWordReady");
+                player1.removeAllListeners("end");
+                player2.removeAllListeners("end");
             });
             player2.on("end", () => {
                 player2.to(roomId).emit("end");
@@ -94,6 +96,8 @@ io.on("connection", (socket: Socket) => {
                 player2.removeAllListeners("myGuessResult");
                 player1.removeAllListeners("guessWordReady");
                 player2.removeAllListeners("guessWordReady");
+                player1.removeAllListeners("end");
+                player2.removeAllListeners("end");
 
                 //turning off message, player, myguessresult, guesswordready for both users?
             });
