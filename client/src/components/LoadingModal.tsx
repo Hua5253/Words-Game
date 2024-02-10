@@ -46,16 +46,6 @@ export default function LoadingModal({ loadingGame, socket }: Props) {
                             Waiting for another player to join ....
                         </div>
                     </div>
-                    <div className="modal-footer d-grid justify-content-center">
-                        <button
-                            type="button"
-                            className="btn btn-primary"
-                            data-bs-dismiss="modal"
-                            onClick={handleJoinClick}
-                        >
-                            join
-                        </button>
-                    </div>
                 </div>
             </div>
         </div>
