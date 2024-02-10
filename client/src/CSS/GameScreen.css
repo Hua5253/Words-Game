@@ -54,6 +54,7 @@
 .record table {
     border: 2px solid black;
     width: 200px;
+    height: 30vw;
 }
 .record table thead {
     position: sticky;
@@ -62,7 +63,7 @@
 
 .playertable {
     overflow-y: scroll;
-    height: 50vh;
+    height: 40vh;
     display: block;
     border: 5px solid rgb(255, 255, 255);
 }
